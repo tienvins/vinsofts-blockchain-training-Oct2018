@@ -80,9 +80,12 @@ contract Bank2 is  Bank, Action {
         _;
     }
     
+    event da_gui(address onwergui, address onwernhan,uint sotien);
+    
     function gui_tien(address onwernhan, uint sotien) check_acc(msg.sender) check_tongtien(sotien) check_sodu(msg.sender,sotien) returns(address, address,uint,uint,uint){
         OwnerToUser[msg.sender]._sodu-=sotien;
         OwnerToUser[onwernhan]._sodu+=sotien;
+        emit da_gui(msg.sender, onwernhan, sotien);
         _History.push(History(msg.sender,onwernhan,sotien,now));
         return (OwnerToUser[msg.sender]._id,OwnerToUser[onwernhan]._id,sotien,OwnerToUser[onwernhan]._sodu,now);
     }
@@ -100,8 +103,7 @@ contract Bank2 is  Bank, Action {
         }
         return ds;
     }
-    function get_history_onwer() returns(uint){
-        require(OwnerToUser[msg.sender]._id==msg.sender,"Không có tài khoản");
+    function get_history_onwer() check_acc(msg.sender) returns(uint){
         uint sum=0;
         for(uint i=0; i<_History.length;i++){
             if(_History[i]._from==msg.sender){
