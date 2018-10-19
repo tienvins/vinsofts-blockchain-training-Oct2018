@@ -1,0 +1,113 @@
+pragma solidity ^0.4.25;
+
+contract Animals{
+    uint randNonce = 0;
+    struct Animals{
+        uint dna;
+        string name;
+        bool sex;
+        uint age;
+        uint weight;
+        uint bornTime; //( Thoi gian sinh ra )
+        bool status;
+        uint coolDownTime;
+    }
+   
+    mapping(address => uint) public MapaddressToAnimals;    // xem so Animals so huu cua 1 address
+    mapping(uint => address) public MapuintToAddressAnimals; // xem address la Animals nao
+    
+    Animals[] animals;
+    
+    modifier onlyOwnerOf() {
+        require(animals.length > 0 && animals[MapaddressToAnimals[msg.sender]].dna != 0x0);  // check da tao zoo moi dc thuc thi
+        _;
+    }
+    
+    modifier actackZoo(uint _targetId) {
+        require(animals[_targetId].status==true);
+        _;
+        
+    }
+    function randMod(uint _modulus) internal returns(uint) {
+        randNonce++;
+        return uint(keccak256(now, msg.sender, randNonce)) % _modulus;
+    }
+    function _triggercoolDown(uint ZooId, uint _time) internal {
+        animals[ZooId].coolDownTime = uint(now + _time);
+    }
+    
+    function _isReady() internal returns (bool) {
+      return (animals[MapaddressToAnimals[msg.sender]].coolDownTime <= now);
+    }
+    
+}
+
+contract Zoo is Animals{
+    
+    event CreateZoombieSuss(uint id);
+    
+	function createAnimal(string _name, bool _sex) public {
+	    require(MapaddressToAnimals[msg.sender] == 0x0);
+	    uint dna = uint(uint(keccak256(block.timestamp, _name))/123456789);
+	    uint id = animals.push(Animals(dna, _name, _sex, 0, 0, now, false, 0)) -1;
+	    MapuintToAddressAnimals[id] = msg.sender;
+	    MapaddressToAnimals[msg.sender] = id;
+	    CreateZoombieSuss(id);
+	}
+	
+    function Eat(uint _targetId) public;
+	function Run() public;
+	function Slain() public;  // bat đồ sát
+	function Sleep() public;
+	function InfoZoo() public view returns (uint, string,bool, uint, uint, uint, bool, uint);
+}
+
+contract AnimalsGrown is Zoo{
+	
+    function Eat(uint _targetId) public onlyOwnerOf actackZoo(_targetId){
+        require(_isReady(),"_triggercoolDown invali");
+        Animals storage myZoo = animals[MapaddressToAnimals[msg.sender]];
+        Animals storage enemyZoo = animals[_targetId];
+        
+        if(myZoo.age>=enemyZoo.age){
+            myZoo.status=true;
+            // taasn cong
+            uint8 attackVictoryProbability = 50;
+            uint rand = randMod(100);
+            if(myZoo.age>enemyZoo.age){
+                if (rand <= attackVictoryProbability) {
+                  myZoo.age+=2;
+                  myZoo.weight+=2;
+                  myZoo.coolDownTime = 1 days;
+                }
+            }else if(myZoo.weight>enemyZoo.weight){
+                if (rand <= attackVictoryProbability) {
+                  myZoo.age+=2;
+                  myZoo.weight+=2;
+                  myZoo.coolDownTime = 1 days;
+                }
+            }
+        }
+    }
+	function Run() public onlyOwnerOf{
+	    require(_isReady());
+	    Animals animal = animals[MapaddressToAnimals[msg.sender]];
+	    animal.age += 1;
+	    animal.weight += 1;
+	    animal.status = true;
+	    _triggercoolDown(MapaddressToAnimals[msg.sender], 1 hours);
+	}
+	
+	function Sleep() public onlyOwnerOf {
+	    animals[MapaddressToAnimals[msg.sender]].status = false;
+	}
+	function Slain() public onlyOwnerOf{
+	    animals[MapaddressToAnimals[msg.sender]].status = true;
+	}
+	
+	function InfoZoo() onlyOwnerOf public view returns(uint, string,bool, uint, uint, uint, bool, uint)  {
+	    Animals memory animal = animals[MapaddressToAnimals[msg.sender]];
+	    return (animal.dna, animal.name, animal.sex, animal.age, animal.weight, animal.bornTime, animal.status, animal.coolDownTime);
+	}
+		
+}
