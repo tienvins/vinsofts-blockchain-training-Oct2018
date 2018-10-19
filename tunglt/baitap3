@@ -1,0 +1,73 @@
+pragma solidity ^0.4.25;
+
+contract CaCuocs{
+    
+    uint amount = 0 ether;
+    uint randNonce = 0;
+    uint soNguoiSeQuayThuong = 2;
+    struct Customer{
+        uint price;
+        address owner;
+    }
+    Customer[] public customers;
+    
+    mapping(address => uint) ownerToUserId;
+    mapping(address => uint) public ownerToNumber;
+    mapping(uint => address[]) public numberToOwner;
+    
+    function randMod(uint _modulus) internal returns(uint) {
+        randNonce++;
+        return uint(keccak256(now, msg.sender, randNonce)) % _modulus;
+    }
+    
+    function Reg() public{
+        require(ownerToUserId[msg.sender]==0x0);
+        uint8 id = uint8(customers.push(Customer(0, msg.sender)));
+        ownerToUserId[msg.sender] = id;
+    }
+    function ChonSo(uint _number) public payable{
+        require(ownerToNumber[msg.sender]==0x0 && msg.value >= 1 ether);
+        ownerToNumber[msg.sender] = _number;
+        amount +=msg.value;
+        numberToOwner[_number].push(msg.sender);
+    }
+    
+    function TraoThuong(){
+        require(customers.length%soNguoiSeQuayThuong==0);
+        uint rand = randMod(10);
+        address[] adr = numberToOwner[rand];
+        if(adr.length>0){
+            uint tienthuong = amount/adr.length;
+            for (uint8 i = 0; i< adr.length; i++){
+                for (uint8 i2 = 0; i2 < customers.length; i2++){
+                    if(customers[i2].owner == adr[i]){
+                        customers[i2].price +=tienthuong;
+                    }
+                }
+            }
+        }
+    }
+    
+    // require(msg.value >= 1 ether,"Phải trên 1 ether");
+    //     customers.push(Customer(_name,_number, 0, msg.sender));
+    //     amount +=msg.value;
+    //     uint songuoisecheck1lan = 5;
+    //     if(customers.length==songuoisecheck1lan*numberCheck){
+    //         uint rand = randMod(10);
+    //         uint[] storage result = DanhSachTrungThuongs;
+    //         for (uint i = 0; i<customers.length; i++){
+    //             if(i>=(songuoisecheck1lan*numberCheck-songuoisecheck1lan) && customers[i].number==rand){
+    //                 result.push(i);
+    //             }
+    //         }
+    //         if(result.length-songuoitrungthuonghientai>0){
+    //             uint tienthuong = amount/result.length;
+    //             for (uint i2 = 0; i2<result.length; i2++){
+    //               customers[result[i2]].price += tienthuong;
+    //             }
+    //             amount = 0 ether;
+    //         }
+    //         numberCheck++;
+    //         songuoitrungthuonghientai = result.length;
+    //     }
+}
