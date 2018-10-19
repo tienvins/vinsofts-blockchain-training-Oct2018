@@ -13,7 +13,7 @@ contract Bank{
     }
     
     function change_name(string ten ) {
-        require(_owner==msg.sender,"Bạn không phải chủ tài khoản ");
+        require(_owner==msg.sender,"Bạn không phải chủ ngân hàng");
         _tenbank=ten; 
     }
     
@@ -65,23 +65,35 @@ contract Bank2 is  Bank, Action {
         return (onwer._ten,onwer._id,onwer._sodu);
     }
     
-    function gui_tien(address onwernhan, uint sotien) returns(address, address,uint,uint,uint){
-        require(OwnerToUser[msg.sender]._sodu>=sotien,"Số dư không đủ");
+    modifier check_acc(address onwer) {
+        require(OwnerToUser[msg.sender]._id==msg.sender,"Không có tài khoản");
+        _;
+    }
+    
+    modifier check_tongtien(uint sotien) {
         require(_tongtien>=sotien,"Ngân hàng không đủ tiền");
+        _;
+    }
+    
+    modifier check_sodu(address onwer,uint sotien) {
+        require(OwnerToUser[msg.sender]._sodu>=sotien,"Số dư không đủ");
+        _;
+    }
+    
+    function gui_tien(address onwernhan, uint sotien) check_acc(msg.sender) check_tongtien(sotien) check_sodu(msg.sender,sotien) returns(address, address,uint,uint,uint){
         OwnerToUser[msg.sender]._sodu-=sotien;
         OwnerToUser[onwernhan]._sodu+=sotien;
         _History.push(History(msg.sender,onwernhan,sotien,now));
         return (OwnerToUser[msg.sender]._id,OwnerToUser[onwernhan]._id,sotien,OwnerToUser[onwernhan]._sodu,now);
     }
-    function rut_tien(uint sotien) returns(address, uint,uint,uint){
-        require(OwnerToUser[msg.sender]._id==msg.sender,"Không có tài khoản");
-        require(_tongtien>=sotien,"Ngân hàng không đủ tiền");
+    function rut_tien(uint sotien) check_acc(msg.sender) check_tongtien(sotien) check_sodu(msg.sender,sotien) returns(address, uint,uint,uint){
         OwnerToUser[msg.sender]._sodu-=sotien;
         _tongtien-=sotien;
         return (OwnerToUser[msg.sender]._id,sotien,OwnerToUser[msg.sender]._sodu,now);
     }
     
     function get_onwer() returns(address[]){
+        require(_owner==msg.sender,"Bạn không phải chủ ngân hàng");
         address[] memory ds = new address[](_Onwer.length);
         for(uint i=0; i<_Onwer.length;i++){
             ds[i]=(_Onwer[i]._id);
