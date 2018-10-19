@@ -1,10 +1,13 @@
 pragma solidity ^0.4.25;
 
+//modify by aris-vu
+//overview: it's looking so good, but, i've something i recommended for you. see below
+
 contract Bank{
-    
-    string _tenbank;
-    uint _tongtien;
-    address _owner;
+    //first, using English for code, comment
+    string _tenbank; //need to be edit
+    uint _tongtien; //need to be edit
+    address _owner; //with local variable, don't use _
     
     constructor(string ten) {
         _tenbank=ten;
@@ -12,11 +15,14 @@ contract Bank{
         _owner=msg.sender;
     }
     
+    //with function name, it should be changeName, without _
+    //should we using modifier to replace require?
     function change_name(string ten ) {
         require(_owner==msg.sender,"Bạn không phải chủ ngân hàng");
         _tenbank=ten; 
     }
     
+    // it should be replace by public variable
     function get_info() returns(string,address,uint){
        return(_tenbank,_owner,_tongtien);
     }
@@ -29,15 +35,16 @@ interface Action{
 
 contract Bank2 is  Bank, Action {
     
-    mapping(address => Onwer) OwnerToUser;
+    mapping(address => Onwer) OwnerToUser; //first characters should be lowercase
     
+    //it should not be using _ for variable in the struct, see local variable
     struct Onwer{
         string _ten;
         address _id;
         uint _sodu;
     }
     
-    Onwer[] _Onwer; 
+    Onwer[] _Onwer; //with array, variable name should have 's', e.g: owners
     
     struct History{
         address  _from;  
