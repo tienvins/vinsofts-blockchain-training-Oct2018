@@ -1,5 +1,9 @@
 pragma solidity ^0.4.25;
 
+//modifier by aris-vu
+//overview: it's looking so good. great!!!
+//firstly, using English for code, comment
+
 contract Bank {
     string public bankName;
     uint amount;
@@ -25,10 +29,11 @@ interface BankInterface {
 }
 
 contract Bank2 is Bank {
+    //when using struct, it should not be insert struct name in variable
     struct User {
-        string userName;
-        uint amountUser;
-        address ownerUser;
+        string userName; //need to be edit
+        uint amountUser; //need to be edit
+        address ownerUser; //need to be edit
     }
     
     User[] users;
@@ -40,6 +45,7 @@ contract Bank2 is Bank {
         uint timestamp;
     }
     
+    //should we add 's', eg: transactions
     Transaction[] transaction;
     
     mapping (address => uint) OwnerToUserId;
@@ -62,6 +68,7 @@ contract Bank2 is Bank {
     constructor (string _bankName) Bank(_bankName) public {
     }
     
+    //should be using lowercase for first characters
     function DangKyUser(string _nameUser) public {
         User memory user = User(_nameUser, 1000, msg.sender);   //tao doi tuong
         uint id = users.push(user) - 1;
@@ -89,6 +96,7 @@ contract Bank2 is Bank {
         EvRutTienThanhCong(msg.sender, _money);
     }
     
+    //so, as i know, this function return array id => so, how can i find detail of transaction?
     function GetTransactionHistory() public view returns (uint[]) {
         uint[] memory data = new uint[](transaction.length);
         uint counter = 0;
