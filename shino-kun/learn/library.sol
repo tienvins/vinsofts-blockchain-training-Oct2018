@@ -13,8 +13,13 @@ library IntExtended {
 
 contract Test {
     using IntExtended for uint;
-
-    function test(uint _base) returns (uint){
+    
+    modifier checkNumber(uint _base){
+        require(_base > 1);
+        _;
+    }
+    
+    function test(uint _base) checkNumber(_base) returns (uint){
         return _base.increment();
     }
 }
