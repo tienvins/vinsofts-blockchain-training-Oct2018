@@ -5,7 +5,7 @@ contract MyEnum {
     ActionChoices constant defaultChoice = ActionChoices.GoTraight;
 
     function setGoTraight() public {
-        choice = ActionChoices.GoTraight;
+        choice = ActionChoices.GoRight;
     }
     
     function getChoice() view public returns(ActionChoices){
@@ -16,4 +16,16 @@ contract MyEnum {
         return uint(defaultChoice);
     }
 
+    function changeDirection(ActionChoices _choice) public  returns(string){
+       if (_choice == ActionChoices.GoLeft) {
+            //do some thing
+           return "Please go right";
+        } else if (_choice == ActionChoices.GoRight) {
+            //do some thing
+            return "Please go left";
+        }else {
+            return "Anywhere";
+        }
+    }
+ 
 }
