@@ -47,10 +47,10 @@ contract Zoo is Animals{
     event CreateZoombieSuss(uint id);
     
 	function createAnimal(string _name, bool _sex) public {
-	    require(MapaddressToAnimals[msg.sender] == 0x0);
+	    require(MapaddressToAnimals[msg.sender] == 0);
 	    uint dna = uint(uint(keccak256(block.timestamp, _name))/123456789);
-	    uint id = animals.push(Animals(dna, _name, _sex, 0, 0, now, false, 0)) -1;
-	    MapuintToAddressAnimals[id] = msg.sender;
+	    uint id = animals.push(Animals(dna, _name, _sex, 0, 0, now, false, 0));
+	    MapuintToAddressAnimals[id+1] = msg.sender;
 	    MapaddressToAnimals[msg.sender] = id;
 	    CreateZoombieSuss(id);
 	}
