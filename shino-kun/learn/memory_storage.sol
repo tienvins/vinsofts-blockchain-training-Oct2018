@@ -2,22 +2,18 @@ pragma solidity ^0.4.5;
 import "./library.sol";
 
 contract MyMemory {
-    uint num1;
-    uint num2;
-    constructor (){
-        num1 = 1;
-        num2 = 2;
+    struct Number { uint num; }
+    Number[] items;
+
+    function myMemory(uint _u)  {
+        Number memory item = Number(_u);
+        items.push(item);
     }
 
-    function myMemory(uint _u) returns (uint, uint) {
-        uint memory num3 = num1;
-        num3 += _u;
-        return (num1, num3);
-    }
-
-    function myStorage(uint _u) returns (uint, uint) {
-        uint storage num4 = num2;
-        num4 += _u;
-        return (num2, num4);
+    function myStorage(uint _index) returns (uint) {
+        require(items.length > _index, "hihihi");
+        Number storage item = items[_index];
+       
+        return (item.num);
     }
 }
