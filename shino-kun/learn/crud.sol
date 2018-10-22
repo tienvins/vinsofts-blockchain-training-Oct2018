@@ -75,11 +75,13 @@ contract UserCrud {
         return true;
     }
 
-    function deleteUser(address userAddress) public returns(address[] listUserAddress){
-        delete userIndex[userStructs[userAddress].index];
-        delete userStructs[userAddress];
+    function deleteUser(address userAddress) constant returns (bool success){
+        uint rowToDelete = userStructs[userAddress].index;
+        address keyToMove = userIndex[userIndex.length-1];
+        userIndex[rowToDelete] = keyToMove;
+        userStructs[keyToMove].index = rowToDelete;
         userIndex.length --;
-        return userIndex;
+        return true;
     }
 
 
@@ -89,6 +91,10 @@ contract UserCrud {
 
     function getCountUsers() returns (uint){
         return userIndex.length;
+    }
+
+    function getListUserAddress() public constant returns (address[] list){
+        return userIndex;
     }
 
 }
