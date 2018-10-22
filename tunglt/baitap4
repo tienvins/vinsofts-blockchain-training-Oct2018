@@ -1,0 +1,26 @@
+pragma solidity ^0.4.25;
+
+contract Thongtin{
+    
+    struct MyPham{
+        string name;
+        uint price;
+        string addr;
+        string qcode;
+        address owner;
+    }
+    
+    MyPham[] myphams;
+    
+    mapping(string => MyPham) ownerToProduct;
+     
+    function addProduct(string _name, uint _price, string _addr, string _qcode){
+        MyPham memory mp = MyPham(_name, _price, _addr, _qcode, msg.sender);
+        myphams.push(mp);
+        ownerToProduct[_qcode] = mp;
+    }
+    
+    function getProduct(string _qcode) public view returns(string,uint,string,string,address){
+        return (ownerToProduct[_qcode].name,ownerToProduct[_qcode].price,ownerToProduct[_qcode].addr,ownerToProduct[_qcode].qcode,ownerToProduct[_qcode].owner);
+    }
+}
