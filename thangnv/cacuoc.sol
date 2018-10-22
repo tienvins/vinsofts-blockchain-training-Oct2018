@@ -5,6 +5,7 @@ contract CaCuoc{
     
     address onwer;
     uint totalMoney;
+    uint numOnwer=5;
     
     constructor(){
         onwer = msg.sender;
@@ -25,6 +26,7 @@ contract CaCuoc{
     }
     
     Onwer[] Onwers;
+    Onwer[] EmtyOnwers;
     mapping(address => Onwer) ToOnwer;
     
     function getInfoCaCuoc() returns(uint,uint){
@@ -34,9 +36,17 @@ contract CaCuoc{
     History[] Historys;
     mapping(address => History) ToHistory;
     
+    function check(address sender) internal returns(bool) {
+        for(uint i=0;i<Onwers.length;i++){
+                if(Onwers[i].id==sender){
+                    return false;
+                }
+            }
+            return true;
+    }
     
     modifier checkAcc(address sender){
-        require(ToOnwer[sender].id!=sender,"Bạn đã đăng kí");
+        require(check(sender),"Bạn đã đăng kí");
         _;
     }
     
@@ -45,14 +55,18 @@ contract CaCuoc{
         Onwers.push(onwer);
         ToOnwer[msg.sender]=onwer;
         totalMoney+=msg.value;
+        if(Onwers.length==numOnwer){
+            run();   
+        }
     }
     
     function getInfoOnwer() returns(address,uint){
         return(ToOnwer[msg.sender].id, ToOnwer[msg.sender].money);
     }
     
-    function run() returns(address){   
-        uint number = (uint(keccak256(now)) % 5)+1;
+    function run() internal returns(address) {   
+        uint number = (uint(keccak256(now)) % numOnwer)+1;
+        address o;
         for(uint i=0; i<Onwers.length;i++){
             if(Onwers[i].number==number){
                 Onwers[i].money+=totalMoney;
@@ -60,7 +74,9 @@ contract CaCuoc{
                 History memory history= History(Onwers[i].id,totalMoney,Onwers[i].number,now);
                 Historys.push(history);
                 totalMoney=0;
-                return Onwers[i].id;
+                o=Onwers[i].id;
+                Onwers=EmtyOnwers;
+                return o;
             }
         }
     }
