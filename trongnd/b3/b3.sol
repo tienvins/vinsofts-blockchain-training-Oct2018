@@ -3,7 +3,7 @@ pragma solidity ^0.4.25;
 contract CaCuoc{
     
     uint public amount = 0 ether;
-    uint quay = 2;
+    uint quay = 5;
     struct Customer{
         uint vis;
         address owner;
@@ -14,7 +14,7 @@ contract CaCuoc{
     Customer[] public customers;
     ownerToNumber[] ownertonumbers;
     ownerToNumber[] ownertonumbers2;
-    uint[] cacsodadcchon;
+    uint[] numberS;
     
     mapping(address => uint) ownerToUserId;
     mapping(uint => address[]) numberToOwner;
@@ -37,15 +37,15 @@ contract CaCuoc{
         ownertonumbers.push(ownerToNumber(msg.sender));
         amount +=msg.value;
         numberToOwner[_number].push(msg.sender);
-        cacsodadcchon.push(_number);
+        numberS.push(_number);
         if(ownertonumbers.length%quay==0){
-            TraoThuong();
+            QuayThuong();
         }
     }
     
-    function TraoThuong() private {
-        uint rand = 1;
-        address[] adr = numberToOwner[rand];
+    function QuayThuong() private {
+        uint random =  (uint(keccak256(now)) % quay) + 1;
+        address[] adr = numberToOwner[random];
         if(adr.length>0){
             uint tienthuong = amount/adr.length;
             for (uint8 i = 0; i< adr.length; i++){
@@ -55,14 +55,14 @@ contract CaCuoc{
                     }
                 }
             }
-            for (uint8 i3 = 0; i3 < cacsodadcchon.length; i3++){
-                delete numberToOwner[cacsodadcchon[i3]];
+            for (uint8 i3 = 0; i3 < numberS.length; i3++){
+                delete numberToOwner[numberS[i3]];
             }
             amount = 0 ether;
-            delete cacsodadcchon;
+            delete numberS;
             ownertonumbers = ownertonumbers2;
         }else{
-            delete cacsodadcchon;
+            delete numberS;
             ownertonumbers = ownertonumbers2;
         }
     }
