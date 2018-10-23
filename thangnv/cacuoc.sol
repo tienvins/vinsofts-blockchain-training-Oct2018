@@ -5,7 +5,7 @@ contract CaCuoc{
     
     address onwer;
     uint totalMoney;
-    uint numOnwer=5;
+    uint numOnwer=3;
     
     constructor(){
         onwer = msg.sender;
@@ -50,18 +50,19 @@ contract CaCuoc{
         _;
     }
     
-    function register(uint number) payable checkAcc(msg.sender) {
+    function register(uint number) payable checkAcc(msg.sender) returns(address){
         Onwer memory onwer = Onwer(msg.sender, 0, number);
         Onwers.push(onwer);
         ToOnwer[msg.sender]=onwer;
         totalMoney+=msg.value;
         if(Onwers.length==numOnwer){
-            run();   
+            return run();   
         }
+        return msg.sender;
     }
     
     function getInfoOnwer() returns(address,uint){
-        return(ToOnwer[msg.sender].id, ToOnwer[msg.sender].money);
+        return(ToOnwer[msg.sender].id, getMoneyOnwer(msg.sender));
     }
     
     function run() internal returns(address) {   
@@ -81,7 +82,7 @@ contract CaCuoc{
         }
     }
     
-    function getMoneyOnwer(address onwer) returns(uint){
+    function getMoneyOnwer(address onwer) internal returns(uint){
         uint money =0;
         for(uint i=0; i<Historys.length;i++){
             if(Historys[i].id==ToOnwer[onwer].id){
