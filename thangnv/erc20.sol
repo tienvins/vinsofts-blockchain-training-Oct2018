@@ -38,7 +38,7 @@ contract VinToken{
         return toOnwer[msg.sender].tokenOnwer;
     }
     
-    function transfer(address to, uint tokens) public checkOnwer() checkNumberToken(tokens) returns (bool) {
+    function transfer(address to, uint tokens) public checkNumberToken(tokens) returns (bool) {
         toOnwer[msg.sender].tokenOnwer-=tokens;
         toOnwer[to].tokenOnwer+=tokens;
         return true;
@@ -58,16 +58,6 @@ contract VinToken{
     
     function allowance (address _owner, address _spender)public returns (uint){
         return allowed[_owner][_spender];
-    }
-    
-    modifier checkOnwer(){
-        require(msg.sender==toOnwer[msg.sender].id,"Bạn chưa có tài khoản tài khoản");
-        _;
-    }
-    
-    modifier checkRegister(){
-        require(msg.sender!=toOnwer[msg.sender].id,"Bạn đã tạo tài khoản  rồi");
-        _;
     }
     
     modifier checkNumberToken(uint tokens){
