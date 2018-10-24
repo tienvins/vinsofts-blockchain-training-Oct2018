@@ -2,7 +2,11 @@ pragma solidity ^0.4.25;
     
 contract VinToken{
     
-    uint totalToken;
+    string public name;
+    uint public decimals;
+    string public symbol;
+    
+    uint public totalToken;
     
     struct Onwer{
         address id;
@@ -14,16 +18,16 @@ contract VinToken{
     mapping(address => mapping(address => uint)) allowed;
     
     constructor(){  
-        totalToken=1000;
+        totalToken=1000000;
+        name="abc";
+        decimals=0;
+        symbol="Vin";
+        Onwer memory onwer = Onwer(msg.sender,totalToken);
+        toOnwer[msg.sender]=onwer;
     }
     
     function totalSupply() public view returns(uint){
         return totalToken;
-    }
-    
-    function register() checkRegister(){
-        Onwer memory onwer = Onwer(msg.sender,100);
-        toOnwer[msg.sender]=onwer;
     }
     
     function balanceOf (address _owner) public returns (uint){
