@@ -89,7 +89,16 @@ contract Bettings {
     }
 
     mapping (address => BetHistories) betHistories;
-    address[] listPlayers;
+    address[] listPlayers;  
+
+    // event thông báo có người đặt cược
+    event LogNewBet(
+        uint historyId,
+        string playerName, 
+        uint playerEther,
+        uint playerNumberABet,
+        uint time
+    );
 
     // cá cược
     function betting(address _player, uint _ether, uint numberABet)
@@ -106,9 +115,21 @@ contract Bettings {
 
         // check số tiền trong ví
         if (playerMoney - _ether > 0){
-
             BetHistories history = BetHistories[_player];
 
+            history.id = listPlayers.push(_player) - 1;
+            history.playerName = playerName; 
+            history.playerEther = _ether; 
+            history.playerNumberABet = numberABet; 
+            history.time = now; 
+            
+            emit LogNewBet(
+                history.id,
+                playerName, 
+                _ether,
+                numberABet,
+                now
+            );
             return (
                 playerId,
                 playerName,
@@ -116,10 +137,19 @@ contract Bettings {
                 numberABet
             );
         }
-
-        
     }
 
+
+    // check số người tham gia đặt cược
+    modifier checkPlayer(){
+        require(listPlayers.length >= 10), "Đủ 10 người chơi mới được quay thưởng";
+        _;
+    }
+
+    // mở thưởng
+    function rewardInform() checkPlayer public constant returns (address hero){
+        
+    }
 
 
 }
