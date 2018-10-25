@@ -1,0 +1,134 @@
+pragma solidity ^0.4.25;
+import "./VinTokenFactpry.sol";
+
+library SafeMath {
+    function add(uint a, uint b) internal pure returns (uint c) {
+        c = a + b;
+        require(c >= a);
+    }
+    function sub(uint a, uint b) internal pure returns (uint c) {
+        require(b <= a);
+        c = a - b;
+    }
+    function mul(uint a, uint b) internal pure returns (uint c) {
+        c = a * b;
+        require(a == 0 || c / a == b);
+    }
+    function div(uint a, uint b) internal pure returns (uint c) {
+        require(b > 0);
+        c = a / b;
+    }
+}
+
+
+contract ICOTokenSale is ERC20Token{
+    using SafeMath for uint256;
+    
+    address public tokenOnwer; //the address receive ether
+    
+    uint256 public tokenSale1;//max tokens for public-sale
+    uint256 public tokenSale2;//max tokens for public-sale
+    uint256 public tokenSale3;//max tokens for public-sale
+    uint256 public tokenSale4;//max tokens for public-sale
+    
+    uint256 public phasePublicSale1_From = now + 1 days;
+    uint256 public phasePublicSale1_To = now + 3 days;
+    uint256 public preSaleTokenSold1 = 0;  // token ban dc lan 1
+
+    uint256 public phasePublicSale2_From = now + 4 days;
+    uint256 public phasePublicSale2_To = now + 5 days;
+    uint256 public preSaleTokenSold2 = 0;  // token ban dc lan 2
+
+    uint256 public phasePublicSale3_From = now + 6 days;
+    uint256 public phasePublicSale3_To = now + 7 days;
+    uint256 public preSaleTokenSold3 = 0;  // token ban dc lan 3
+    
+    uint256 public phasePublicSale4_From = now;
+    uint256 public phasePublicSale4_To = now + 1 days;
+    uint256 public preSaleTokenSold4 = 0;  // token ban dc lan 4
+    
+    uint256 public preSaleTokenSold = 0;  // token ban dc lan 3
+	  
+	constructor(uint _initialSupply,string _nameCoin, string _symbol, uint8 _decimals) ERC20Token(_initialSupply, _nameCoin, _symbol, _decimals) public{
+	    tokenOnwer = msg.sender;
+	    
+	    tokenSale1 = 10000 * 10**decimals;
+	    tokenSale2 = 20000 * 10**decimals;
+	    tokenSale3 = 30000 * 10**decimals;
+	    tokenSale4 = 40000 * 10**decimals;
+	    totalSupply = tokenSale1 + tokenSale2 + tokenSale3 + tokenSale4;
+	}
+	
+	struct Buyer {
+        uint256 totalETH; // total eth of investor to buy token
+        uint256 totalTokens; // total token of investor
+    }
+    
+	mapping (address => Buyer) buyers;
+	
+	function getSteep() public view returns(uint8) {
+		if(now<phasePublicSale1_To){
+			if(now>=phasePublicSale1_From)
+				return 1;
+		} else if(now<phasePublicSale2_To){
+			return 2;
+		} else if(now<phasePublicSale3_To){
+			return 3;
+		} else if(now<phasePublicSale4_To){
+			return 4;
+		}
+		return 0;
+	}
+	
+	function ethtoToken(uint256 _value) public view returns(uint256){
+	    uint256 ethReceive = _value;
+	    uint256 exchangeRate = 1;
+	    uint8 icoPhase = getSteep();
+	    require(icoPhase != 0);
+	    uint256 boughtTokens = 1;
+	    return boughtTokens;
+	}
+	function buy() payable public returns(bool){
+	    
+	    uint256 ethReceive = msg.value; // get ether investor send
+	    uint8 icoSteep = getSteep(); 
+	    uint256 boughtTokens = ethtoToken(msg.value); // caculate token 
+	    
+	    if(icoSteep == 1){
+	        if(preSaleTokenSold1.add(boughtTokens) < tokenSale1) {
+    	        buyers[msg.sender].totalETH = buyers[msg.sender].totalETH.add(ethReceive);
+    		    buyers[msg.sender].totalTokens = buyers[msg.sender].totalTokens.add(boughtTokens);
+    		    preSaleTokenSold = preSaleTokenSold.add(boughtTokens);
+	        }
+	    }
+	    return true;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	function () public {
+	    buy();
+	}
+}
