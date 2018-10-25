@@ -1,11 +1,11 @@
 pragma solidity ^0.4.25;
-    
+
 contract VinToken{
     
     string public name;
     uint public decimals;
     string public symbol;
-    
+    uint public price;
     uint public totalToken;
     
     struct Onwer{
@@ -18,10 +18,11 @@ contract VinToken{
     mapping(address => mapping(address => uint)) allowed;
     
     constructor(){  
-        totalToken=1000000;
-        name="abc";
+        name="VinToken";
         decimals=0;
+        totalToken=1000000000;
         symbol="Vin";
+        price = 0.001 ether;
         Onwer memory onwer = Onwer(msg.sender,totalToken);
         toOnwer[msg.sender]=onwer;
     }
@@ -32,10 +33,6 @@ contract VinToken{
     
     function balanceOf (address _owner) public returns (uint){
         return toOnwer[_owner].tokenOnwer;
-    }
-    
-    function balance () public returns (uint){
-        return toOnwer[msg.sender].tokenOnwer;
     }
     
     function transfer(address to, uint tokens) public checkNumberToken(tokens) returns (bool) {
@@ -59,6 +56,7 @@ contract VinToken{
     function allowance (address _owner, address _spender)public returns (uint){
         return allowed[_owner][_spender];
     }
+    
     
     modifier checkNumberToken(uint tokens){
         require(toOnwer[msg.sender].tokenOnwer>=tokens,"Số token của bạn nhỏ hơn số  bạn đang chọn ");
