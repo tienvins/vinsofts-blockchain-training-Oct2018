@@ -1,7 +1,7 @@
 
 pragma solidity ^0.4.25;
 
-import "./vintoken.sol";
+import "./erc20.sol";
 
 contract ICOVinTokenSale is VinToken{
     
@@ -40,15 +40,16 @@ contract ICOVinTokenSale is VinToken{
     }
     
     function getStep() public view returns(uint){
-        if(now>=timeFrom1 || now<=timeTo1)
+        if(now>=timeFrom1 && now<=timeTo1)
             return 1;
-        else if(now>=timeFrom2 || now<=timeTo2)
+        else if(now>=timeFrom2 && now<=timeTo2)
             return 2;
-        else if(now>=timeFrom3 || now<=timeTo3)
+        else if(now>=timeFrom3 && now<=timeTo3)
             return 3;
-        if(now>=timeFrom4 || now<=timeTo4)
+        if(now>=timeFrom4 && now<=timeTo4)
             return 4;
-        return 0;
+        else
+            return 0;
     }
     
     function addBuy(uint tokens,uint ethers) internal {
