@@ -37,7 +37,7 @@ contract Bettings {
 
     // mở ví
     function openWallet(address _sender, string _name, uint _money) 
-            onlyAccount(_sender) 
+            // onlyAccount(_sender) 
             checkAmount(_money) 
             public constant 
             returns(uint id, string name, uint money)
@@ -58,7 +58,7 @@ contract Bettings {
 
     // check số Ether đặt cược
     modifier checkEther(uint _ether){
-        require(_ether > 1, "Bạn phải đặt ít nhất 1 Ether");
+        require(_ether >= 1, "Bạn phải đặt ít nhất 1 Ether");
         _;
     }
 
@@ -111,18 +111,17 @@ contract Bettings {
                  uint playerNumberABet
             )
     {
-        (playerId, playerName, playerMoney) = userInfor(_player);
 
         // check số tiền trong ví
-        if (playerMoney - _ether > 0){
-            BetHistories history = BetHistories[_player];
+        if (users[_player].money - _ether > 0){
+            BetHistories history = betHistories[_player];
 
             history.id = listPlayers.push(_player) - 1;
             history.playerName = playerName; 
             history.playerEther = _ether; 
             history.playerNumberABet = numberABet; 
             history.time = now; 
-            
+            users[_player].money -= _ether;
             emit LogNewBet(
                 history.id,
                 playerName, 
@@ -142,13 +141,22 @@ contract Bettings {
 
     // check số người tham gia đặt cược
     modifier checkPlayer(){
-        require(listPlayers.length >= 10), "Đủ 10 người chơi mới được quay thưởng";
+        require(listPlayers.length >= 10 , "Đủ 10 người chơi mới được quay thưởng");
         _;
     }
 
     // mở thưởng
     function rewardInform() checkPlayer public constant returns (address hero){
-        
+        uint playerId = randomPlayer();
+        return listPlayers[playerId];
+    }
+
+    // random number
+    uint nonce = 1;
+    function randomPlayer () public returns (uint) {
+        uint random = uint(keccak256(now, msg.sender, nonce)) % listPlayers.length;
+        nonce++;
+        return random;
     }
 
 
