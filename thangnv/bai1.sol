@@ -60,6 +60,7 @@ contract Bank2 is  Bank, Action {
         return (onwer.name,onwer.id,onwer.money);
     }
 
+
     function getInfoOnwer() returns (string,address,uint){
         Onwer memory onwer = ownerToUser[msg.sender];
         return (onwer.name,onwer.id,onwer.money);
