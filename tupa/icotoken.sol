@@ -49,7 +49,33 @@ contract ICOToken is Token {
         _;
     }
     
-    function addBuy(uint _token, uint _ether) private {
+    function buyToken() checkTime checkSoldToken payable returns(bool) {
+        if(getCurrentICOPhase()==1){
+            uint token = msg.value/price1;
+            toOwner.transfer(msg.value);
+            toUser[toOwner].amount -=  token;
+            toUser[msg.sender].amount += token;
+            getNumberToken(token,msg.value);
+            return true;
+        }else if (getCurrentICOPhase() == 2){
+            uint token2 = msg.value/price2;
+            toOwner.transfer(msg.value);
+            toUser[toOwner].amount -=  token2;
+            toUser[msg.sender].amount += token2;
+            getNumberToken(token2,msg.value);
+            return true;
+        }else {
+            uint token3 = msg.value/price3;
+            toOwner.transfer(msg.value);
+            toUser[toOwner].amount -=  token3;
+            toUser[msg.sender].amount += token3;
+            getNumberToken(token3,msg.value);
+            return true;
+        }
+        
+    }
+    
+    function getNumberToken(uint _token, uint _ether) private {
         if(getCurrentICOPhase() == 1){
             buyToken1 += _token;
             totalEth1 += _ether;
@@ -60,32 +86,6 @@ contract ICOToken is Token {
             buyToken3 += _token;
             totalEth3 += _ether;
         }
-    }
-    
-    function buyToken() checkTime checkSoldToken payable returns(bool) {
-        if(getCurrentICOPhase()==1){
-            uint token = msg.value/price1;
-            toOwner.transfer(msg.value);
-            toUser[toOwner].amount -=  token;
-            toUser[msg.sender].amount += token;
-            addBuy(token,msg.value);
-            return true;
-        }else if (getCurrentICOPhase() == 2){
-            uint token2 = msg.value/price2;
-            toOwner.transfer(msg.value);
-            toUser[toOwner].amount -=  token2;
-            toUser[msg.sender].amount += token2;
-            addBuy(token2,msg.value);
-            return true;
-        }else {
-            uint token3 = msg.value/price3;
-            toOwner.transfer(msg.value);
-            toUser[toOwner].amount -=  token3;
-            toUser[msg.sender].amount += token3;
-            addBuy(token3,msg.value);
-            return true;
-        }
-        
     }
     
     function getCurrentICOPhase() public constant returns(uint){
