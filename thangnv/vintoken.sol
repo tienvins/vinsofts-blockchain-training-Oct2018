@@ -8,12 +8,12 @@ contract VinToken{
     uint    public price;
     uint    public totalToken;
     
-    struct Onwer{
+    struct Owner{
         address id;
-        uint tokenOnwer;
+        uint tokenOwner;
     }        
     
-    mapping(address=>Onwer)toOnwer;
+    mapping(address=>Owner)toOwner;
     
     mapping(address => mapping(address => uint)) allowed;
     
@@ -23,8 +23,8 @@ contract VinToken{
         totalToken  =   1000000000;
         symbol      =   "Vin";
         price       =   0.001 ether;
-        Onwer memory onwer  =   Onwer(msg.sender,totalToken);
-        toOnwer[msg.sender] =   onwer;
+        Owner memory owner  =   Owner(msg.sender,totalToken);
+        toOwner[msg.sender] =   owner;
     }
     
     function totalSupply() public view returns(uint){
@@ -32,22 +32,22 @@ contract VinToken{
     }
     
     function balanceOf (address _owner) public returns (uint){
-        return toOnwer[_owner].tokenOnwer;
+        return toOwner[_owner].tokenOwner;
     }
     
     function transfer(address to, uint tokens) public checkNumberToken(tokens) returns (bool) {
         
-        toOnwer[msg.sender].tokenOnwer  -=  tokens;
-        toOnwer[to].tokenOnwer          +=  tokens;
+        toOwner[msg.sender].tokenOwner  -=  tokens;
+        toOwner[to].tokenOwner          +=  tokens;
         return true;
         
     }
     
     function transferFrom(address _from, address _to, uint _value)public checkAllowance(_from,_value) returns (bool){
         
-        toOnwer[_from].tokenOnwer   -=  _value;
+        toOwner[_from].tokenOwner   -=  _value;
         allowed[_from][msg.sender]  -=  _value;
-        toOnwer[_to].tokenOnwer     +=  _value;
+        toOwner[_to].tokenOwner     +=  _value;
         return true;
         
     }
@@ -68,7 +68,7 @@ contract VinToken{
     
     modifier checkNumberToken(uint tokens){
         
-        require(toOnwer[msg.sender].tokenOnwer>=tokens,"Số token của bạn nhỏ hơn số  bạn đang chọn ");
+        require(toOwner[msg.sender].tokenOwner>=tokens,"Số token của bạn nhỏ hơn số  bạn đang chọn ");
         _;
         
     }

@@ -29,7 +29,7 @@ contract ICOVinTokenSale is VinToken{
     uint public buyToken4;
     uint public totalEther4;
     
-    address public tokenOnwer; //tài khoản tạo ICOVinTokenSale
+    address public tokenOwner; //tài khoản tạo ICOVinTokenSale
     
     constructor() VinToken(){
         
@@ -57,7 +57,7 @@ contract ICOVinTokenSale is VinToken{
         buyToken4   =   0; 
         totalEther4 =   0;
         
-        tokenOnwer  =   msg.sender;
+        tokenOwner  =   msg.sender;
 
     }
     
@@ -105,15 +105,15 @@ contract ICOVinTokenSale is VinToken{
     function buyVinToken() checkTime() checkEther() checkNumberTokenICO() payable returns(bool) {
         
         uint tokens= msg.value/price;
-        tokenOnwer.transfer(msg.value);
-        toOnwer[tokenOnwer].tokenOnwer-=tokens;
-        toOnwer[msg.sender].tokenOnwer+=tokens;
+        tokenOwner.transfer(msg.value);
+        toOwner[tokenOwner].tokenOwner-=tokens;
+        toOwner[msg.sender].tokenOwner+=tokens;
         addBuy(tokens,msg.value/1 ether);
         return true;
         
     }
     
-    function changePrice(uint priceNew) checkOnwer(){
+    function changePrice(uint priceNew) checkOwner(){
         
         price=priceNew;
         
@@ -147,9 +147,9 @@ contract ICOVinTokenSale is VinToken{
         
     }
     
-    modifier checkOnwer(){
+    modifier checkOwner(){
         
-        require(msg.sender==tokenOnwer,"Bạn không phải chủ token");
+        require(msg.sender==tokenOwner,"Bạn không phải chủ token");
         _;
         
     }
