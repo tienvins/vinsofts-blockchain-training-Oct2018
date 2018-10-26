@@ -91,14 +91,14 @@ contract ERC20Token is StandardToken {
     string public name;                   
     uint8 public decimals;                
     string public symbol;                 
-    string public version = 'H1.0';       
+    string public version = '1.0';       
 
-    function ERC20Token() {
-        balances[msg.sender] = 100000;            
-        totalSupply = 100000;                       
-        name = "T Coin";            
-        decimals = 0;                               
-        symbol = "TCAI";                              
+    function ERC20Token(uint _initialSupply,string _nameCoin, string _symbol, uint8 _decimals) {
+        decimals = _decimals;
+        totalSupply = _initialSupply * 10 **uint(decimals);                      
+        name = _nameCoin;     
+        symbol = _symbol;                              
+        balances[msg.sender] = totalSupply;
     }
     
     function approveAndCall(address _spender, uint256 _value, bytes _extraData) returns (bool success) {
