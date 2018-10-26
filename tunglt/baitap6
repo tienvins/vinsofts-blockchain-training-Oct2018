@@ -146,7 +146,7 @@ contract ICOTokenSale is ERC20Token{
     		    preSaleTokenSold = preSaleTokenSold.add(boughtTokens);
 	    }
 	    
-	    tokenOnwer.transfer(ethReceive);  // chu token nhan tien tu ng gui
+	    tokenOnwer.transfer(msg.value);  // chu token nhan tien tu ng gui
 	    return true;
 	}
 	
