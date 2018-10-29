@@ -1,0 +1,65 @@
+pragma solidity ^0.4.23;
+pragma  experimental ABIEncoderV2;
+contract Animals{
+    struct ani{
+        uint dna;
+        string name;
+        bool sex;
+        uint age;
+        uint weight;
+        uint bortTime;
+        bool status; // trang thai ngu
+        uint coolDownTime;
+    }
+}
+contract Zoo is Animals{
+    mapping (address => ani) map;
+    function initAnimals(string _name,bool _sex,uint _weight,uint _age,bool _status) public{
+     map[msg.sender] = ani(uint(keccak256(abi.encodePacked(_name))),_name,_sex,_age,_weight,now,_status,now);
+        
+    } 
+    function eating(address ad) public{}
+    function working() public{}
+    function sleeping() public{}
+}
+contract AnimalsGrown is Zoo{
+    function eating(address ad) public{
+    if(map[ad].status == false && map[msg.sender].status == false &&(now - map[msg.sender].coolDownTime)> 1 minutes &&(now - map[ad].coolDownTime)> 1 minutes){
+        if(map[msg.sender].age == map[ad].age){
+            if(map[msg.sender].weight > map[ad].weight){
+                map[msg.sender].age += 2;
+                map[msg.sender].weight +=2;
+                map[msg.sender].coolDownTime  = now;
+            }
+            else
+            {
+                map[ad].age += 2;
+                map[ad].weight +=2;
+                map[ad].coolDownTime  = now;
+            }
+        }
+        else if(map[msg.sender].age > map[ad].age){
+                map[msg.sender].age += 2;
+                map[msg.sender].weight +=2;
+                map[msg.sender].coolDownTime  = now;
+            }
+        else if(map[msg.sender].age < map[ad].age)
+            {
+                map[ad].age += 2;
+                map[ad].weight +=2;
+                map[ad].coolDownTime  = now;
+            }
+        }
+    }
+    function working() public{
+            map[msg.sender].age +=1;
+            map[msg.sender].weight +=1;  
+    }
+    function sleeping() public{
+        map[msg.sender].status = true;
+    }
+    function getInfor(address ad) public returns (ani _ani){
+        _ani = map[ad];
+    } 
+    
+}
