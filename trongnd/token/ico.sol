@@ -34,21 +34,21 @@ contract ICOTokenSale is ERC20Token{
     
     uint public phasePublicSale1_From = now;
     uint public phasePublicSale1_To = now + 3 days;
-    uint public preSaleTokenSold1 = 0;  // token ban dc lan 1
+    uint public preSaleTokenSold1 = 0;  
 
     uint public phasePublicSale2_From = now + 4 days;
     uint public phasePublicSale2_To = now + 5 days;
-    uint public preSaleTokenSold2 = 0;  // token ban dc lan 2
+    uint public preSaleTokenSold2 = 0;  
 
     uint public phasePublicSale3_From = now + 6 days;
     uint public phasePublicSale3_To = now + 7 days;
-    uint public preSaleTokenSold3 = 0;  // token ban dc lan 3
+    uint public preSaleTokenSold3 = 0;  
     
     uint public phasePublicSale4_From = now;
     uint public phasePublicSale4_To = now + 1 days;
-    uint public preSaleTokenSold4 = 0;  // token ban dc lan 4
+    uint public preSaleTokenSold4 = 0;  
     
-    uint public preSaleTokenSold = 0;  // token ban dc
+    uint public preSaleTokenSold = 0; 
 	  
 	constructor(uint _initialSupply,string _nameCoin, string _symbol, uint _decimals) ERC20Token(_initialSupply, _nameCoin, _symbol, _decimals) public{
 	    tokenOnwer = msg.sender;
