@@ -8,6 +8,7 @@ contract Bett{
         uint money;
     }
     infor[] public listPeople;
+    infor[] public listPeoplee;
     mapping(address => uint) balances;
     uint nonce;
         modifier check(infor[] list){
@@ -29,7 +30,7 @@ contract Bett{
     function run() check(listPeople)  public payable returns(string _nameWin, address _adresWin){
         uint result = random();
         address win;
-        for(uint i =0 ; i <listPeople.length; i++){
+        for(uint i = 0; i <listPeople.length; i++){
             if(listPeople[i].number == result){
                  win = listPeople[i].adres;
                 _nameWin = listPeople[i].name;
@@ -37,5 +38,9 @@ contract Bett{
                 listPeople[i].adres.transfer(con.balance);  // chuyen tien tu contract den acount
             }
         }
+        listPeople = listPeoplee;
+    }
+    function get() public returns(uint a){
+        a =  listPeople.length;
     }
 }
