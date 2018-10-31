@@ -41,8 +41,8 @@ contract Zoo{
     constructor(){
     }
     
-    function newAnimals(string _name) checkNewAnimals(1) {
-        toArrayAnimals[msg.sender].push( Animals(uint(keccak256(_name)), _name, true, 0, 0, now,false, [now,now]));
+    function newAnimals(string _name, bool _sex) checkNewAnimals(1) {
+        toArrayAnimals[msg.sender].push( Animals(uint(keccak256(_name)), _name, _sex, 0, 0, now,false, [now,now]));
     }
     
     function getNumberAnimals(address onwer) returns(uint){
@@ -77,7 +77,7 @@ contract Zoo{
 
 contract AnimalsGrown is Zoo{
     
-    function eat(uint index1,address owner2, uint index2) checkCoolDownTimeEat(index1)  checkSleep(index1) checkSleepOwner(owner2, index2) returns(bool){
+    function eat(uint index1,address owner2, uint index2) checkCoolDownTimeEat(index1)  checkSleep(index1) checkSleepOwner(owner2, index2) checkAnimalsNull(index1) checkAnimalsOwnerNull(owner2, index2) returns(bool){
         if(toArrayAnimals[msg.sender][index1].age>toArrayAnimals[owner2][index2].age){
             toArrayAnimals[msg.sender][index1].age+=2;
             toArrayAnimals[msg.sender][index1].weight+=2;
@@ -96,15 +96,16 @@ contract AnimalsGrown is Zoo{
         return false;
     }
     
-    function run(uint index) checkCoolDownTimeRun(index) returns(bool){
+    function run(uint index) checkCoolDownTimeRun(index) checkAnimalsNull(index) returns(bool){
         toArrayAnimals[msg.sender][index].age+=1;
         toArrayAnimals[msg.sender][index].weight+=1;
         toArrayAnimals[msg.sender][index].coolDownTime[1]=now+1 hours;
         return true;
     }  
     
-    function sleep(uint index) returns(bool){
+    function sleep(uint index) checkAnimalsNull(index) returns(bool){
         toArrayAnimals[msg.sender][index].status=!toArrayAnimals[msg.sender][index].status;
+        return toArrayAnimals[msg.sender][index].status;
     }
     
     modifier checkCoolDownTimeEat(uint index){
@@ -122,8 +123,18 @@ contract AnimalsGrown is Zoo{
         _;
     }
     
-     modifier checkSleepOwner(address owner,uint index){
+    modifier checkSleepOwner(address owner,uint index){
         require(toArrayAnimals[owner][index].status==true,"Animals của họ đang ngủ ");
+        _;
+    }
+    
+    modifier checkAnimalsNull(uint index){
+        require(toArrayAnimals[msg.sender].length<index,"Animals của bạn không tồn tại ");
+        _;
+    }
+    
+    modifier checkAnimalsOwnerNull(address owner, uint index){
+        require(toArrayAnimals[owner].length<index,"Animals của họ không tồn tại ");
         _;
     }
 }
