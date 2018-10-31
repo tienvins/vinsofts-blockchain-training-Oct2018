@@ -13,7 +13,12 @@ contract Token {
 
 }
 contract StandardToken is Token {
-    function transfer(address _to, uint _value) returns (bool success) {
+    modifier checkMoney(uint _value) {
+        require(balances[msg.sender]>=_value,
+        "Không đủ tiền");
+        _;
+    }
+    function transfer(address _to, uint _value) checkMoney(_value) returns (bool success) {
         if (balances[msg.sender] >= _value && _value > 0) {
             balances[msg.sender] -= _value;
             balances[_to] += _value;
@@ -21,7 +26,7 @@ contract StandardToken is Token {
             return true;
         } else { return false; }
     }
-    function transferFrom(address _from, address _to, uint _value) returns (bool success) {
+    function transferFrom(address _from, address _to, uint _value) checkMoney(_value) returns (bool success) {
         if (balances[_from] >= _value && allowed[_from][msg.sender] >= _value && _value > 0) {
             balances[_to] += _value;
             balances[_from] -= _value;
