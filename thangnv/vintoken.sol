@@ -75,8 +75,10 @@ contract VinToken{
     
     modifier checkAllowance(address _from,uint tokens){
         
+        require(toOwner[_from].tokenOwner>=tokens,"Số token của người ủy quyền  không  đủ");
         require(allowance(_from,msg.sender)>=tokens,"Số token được ủy quyền  cho bạn nhỏ hơn số  bạn đang chọn ");
         _;
         
     }
+    
 }

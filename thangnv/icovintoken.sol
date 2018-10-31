@@ -1,7 +1,7 @@
 
 pragma solidity ^0.4.25;
 
-import "./erc20.sol";
+import "./vintoken.sol";
 
 contract ICOVinTokenSale is VinToken{
     
