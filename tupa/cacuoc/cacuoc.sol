@@ -1,59 +1,34 @@
 pragma solidity ^0.4.25;
-
-contract CaCuoc {
-    
-    address owner;
-    uint public totalMoney;
-    uint totalPeople = 5;
-    
-    struct User{
-        address addressOwner;
-        uint amountOwner;
-        uint numberOwner;
+contract CC{
+    address owner = this;
+    uint totalPeople = 3;
+    struct User{    
+        uint number;
+        address addres;
     }
     User[] users;
     
-    mapping (address => User) toUser;
-    
-    constructor() {
-        owner = msg.sender;
-        totalMoney = 0;
-    }
-    
-    modifier checkAcc(){
-        require(toUser[msg.sender].addressOwner != 0, "Bạn chưa có tài khoản");
+    modifier checkBalance(){
+        require(msg.sender.balance > msg.value, "Bạn ko đủ tiền để cược");
         _;
     }
-    
-    function dangKyAndChooseNumber(uint _numberOwner) public payable {
-        require(toUser[msg.sender].addressOwner == 0, "Bạn đã có tài khoản");
-        User memory user = User(msg.sender, 0, _numberOwner);
-        users.push(user);
-        toUser[msg.sender] = user;
-        require(msg.value >= 1 ether,"Tối thiểu 1 ether");
-        totalMoney += msg.value;
-        if(users.length==totalPeople){
-            random();   
+    modifier checkNumber(uint _number){
+        require(_number < totalPeople,"Số đc chon từ 1->10");
+        _;
+    }
+    function chooseNumber(uint _number) checkBalance checkNumber(_number) public payable returns(address _addressWin){
+        users.push(User(_number,msg.sender));
+        if(users.length == totalPeople){
+            return random();
         }
     }
-    function infoUser() checkAcc() public view returns(uint, uint, address){
-        User memory user = toUser[msg.sender];
-        return (user.amountOwner,user.numberOwner, user.addressOwner);
-    }
-
-    function random() checkAcc() internal returns(address) {
-        uint number = (uint(keccak256(now)) % totalPeople) + 1;
-        for(uint i=0; i <= users.length; i++){
-            if(users[i].numberOwner==number){
-                users[i].amountOwner+=totalMoney;
-                toUser[users[i].addressOwner]=users[i];
-                totalMoney=0;
-                return users[i].addressOwner;
+    function random() private view returns(address _addressWin){
+        uint random = uint(keccak256(now)) % totalPeople;
+        for(uint i=0; i<users.length;i++){
+            if(users[i].number == random){
+                _addressWin = users[i].addres;
+                users[i].addres.transfer(owner.balance);
             }
         }
-    }
-    
-    function getInfoOnwer() public view returns(address,uint){
-        return(toUser[msg.sender].addressOwner, toUser[msg.sender].amountOwner);
     }
 }

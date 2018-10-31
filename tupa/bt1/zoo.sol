@@ -1,8 +1,7 @@
 pragma solidity ^0.4.25;
-
-contract Animals {
-    uint randNonce = 0;
-    struct Animals {
+pragma  experimental ABIEncoderV2;
+contract Animals{
+    struct Animals{
         uint dna;
         string name;
         bool sex;
@@ -10,94 +9,68 @@ contract Animals {
         uint weight;
         uint bornTime;
         bool status;
-        uint coolDownTime; 
+        uint coolDownTime;
     }
-    
     Animals[] animals;
-    
-    mapping(address => uint) AddressToAnimals;
-    mapping(uint => address) UintToAdressAnimals;
-    
-    modifier checkZoo(){
-        require(animals.length > 0 && animals[AddressToAnimals[msg.sender]].dna != 0);
-        _;
-    }
-    modifier attackZoo(uint _targetId){
-        require(animals[_targetId].status == true);
-        _;
-    }
-    
-    function randMod(uint _modulus) internal returns(uint) {
-        randNonce++;
-        return uint(keccak256(now, msg.sender, randNonce)) % _modulus;
-    }
-    function _triggercoolDown(uint ZooId, uint _time) internal {
-        animals[ZooId].coolDownTime = uint(now + _time);
-    }
-    
-    function _isReady() internal returns (bool) {
-      return (animals[AddressToAnimals[msg.sender]].coolDownTime <= now);
-    }
-    
+    mapping(address => Animals) toAnimals;
 }
 contract Zoo is Animals{
+    event EvCreateSuccess(uint dna, string name, bool sex, uint age, uint weight, uint bornTime, bool status, uint coolDownTime);
+    event EvEatSuccess(address _address);
     
-    event EvCreateAnimals(uint id);
-    
-    function createAnimals(string _name, bool _sex) public {
-        require(AddressToAnimals[msg.sender] == 0, "chi duoc tao 1 lan");
-        uint dna = uint(keccak256(block.timestamp, _name));
-        uint id = animals.push(Animals(dna, _name, _sex, 0, 0, now, false, 0)) ;
-        AddressToAnimals[msg.sender] = id;
-        UintToAdressAnimals[id] = msg.sender;
-        EvCreateAnimals(id);
+    modifier checkCreate(){
+        require(toAnimals[msg.sender].dna == 0,"tạo 1 lần");
+        _;
     }
-    function Eat(uint _targetId) public;
+    modifier attackZoo(address _address){
+        require(toAnimals[_address].status != true, "trạng thái ko thể tấn công");
+        _;
+    }
+    
+    function createAnimals(string _name,bool _sex) checkCreate public {
+        uint dna = uint(keccak256(now, _name));
+        toAnimals[msg.sender] = Animals(dna,_name,_sex,1,1,now,false,0);
+        emit EvCreateSuccess(dna, _name, _sex, 0, 0, now, false, 0);
+    }
+    
+    function Eat(address _address) public;
     function Training() public;
     function Sleep() public;
-    function GetInfoZoo() public view returns (uint, string, bool, uint, uint, uint, bool, uint);
 }
-contract AnimalGrow is Zoo {
-    function Eat(uint _targetId) public checkZoo attackZoo(_targetId){
-        require(_isReady());
-        Animals storage myZoo = animals[AddressToAnimals[msg.sender]];
-        Animals storage enemyZoo = animals[_targetId];
-        
-        if(myZoo.age >= enemyZoo.age){
-            myZoo.status = true;
-            //attack
-            uint attackRatioWin = 50;
-            uint rand = randMod(100);
-            if(myZoo.age > enemyZoo.age){
-                if(rand <= attackRatioWin) {
-                    myZoo.age += 2;
-                    myZoo.weight += 2;
-                    myZoo.coolDownTime = 1 minutes;
+contract AnimalsGrown is Zoo {
+    function Sleep() public{
+        toAnimals[msg.sender].status = true;
+    }
+    function getInfoZoo() public view returns(Animals _Animals){
+        _Animals = toAnimals[msg.sender];
+    }
+    function Training() public {
+        toAnimals[msg.sender].age += 1;
+        toAnimals[msg.sender].weight +=1;
+        toAnimals[msg.sender].coolDownTime += 1 minutes;
+    }
+    function Eat(address _address) attackZoo(_address) public {
+        if(toAnimals[_address].status == false){
+            if(toAnimals[msg.sender].age == toAnimals[_address].age){
+                if(toAnimals[msg.sender].weight > toAnimals[_address].weight){
+                    toAnimals[msg.sender].age += 2;
+                    toAnimals[msg.sender].weight +=2;
+                    toAnimals[msg.sender].coolDownTime += 2 minutes;
+                }else {
+                    toAnimals[_address].age +=2;
+                    toAnimals[_address].weight +=2;
+                    toAnimals[_address].coolDownTime += 2 minutes;
                 }
-            }else if(myZoo.weight > enemyZoo.weight){
-                if (rand <= attackRatioWin) {
-                    myZoo.age += 2;
-                    myZoo.weight +=2;
-                    myZoo.coolDownTime = 1 minutes;
-                }
+            }else if (toAnimals[msg.sender].age > toAnimals[_address].age){
+                toAnimals[msg.sender].age += 2;
+                toAnimals[msg.sender].weight +=2;
+                toAnimals[msg.sender].coolDownTime += 2 minutes;
+            }else{
+                toAnimals[_address].age +=2;
+                toAnimals[_address].weight +=2;
+                toAnimals[_address].coolDownTime += 2 minutes;
             }
         }
-        
-    }
-    function Training() public checkZoo {
-        require(_isReady());
-        Animals animal = animals[AddressToAnimals[msg.sender]];
-        animal.age += 1;
-        animal.weight +=1;
-        animal.status = true;
-        _triggercoolDown(AddressToAnimals[msg.sender], 1 minutes);
-    }
-    function Sleep() public checkZoo {
-        animals[AddressToAnimals[msg.sender]].status = false;
-        
-    }
-    function GetInfoZoo() public view returns (uint, string, bool, uint, uint, uint, bool, uint){
-        Animals memory animal = animals[AddressToAnimals[msg.sender] -1 ];
-        return (animal.dna, animal.name ,animal.sex, animal.age, animal.weight, animal.bornTime, animal.status, animal.coolDownTime);
+        emit EvEatSuccess(_address);
     }
 }

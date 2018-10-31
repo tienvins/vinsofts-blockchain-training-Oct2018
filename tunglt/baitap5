@@ -89,15 +89,21 @@ contract ERC20Token is StandardToken {
     }
     
     string public name;                   
-    uint8 public decimals;                
+    uint public decimals;                
     string public symbol;                 
     string public version = '1.0';       
 
-    function ERC20Token(uint _initialSupply,string _nameCoin, string _symbol, uint8 _decimals) {
+    function ERC20Token(uint _initialSupply,string _nameCoin, string _symbol, uint _decimals) {
+        if(_initialSupply==0){
+            _initialSupply = 10000;
+        }
+        if(_decimals==0){
+            _decimals = 5;
+        }
         decimals = _decimals;
         totalSupply = _initialSupply * 10 **uint(decimals);                      
         name = _nameCoin;     
-        symbol = _symbol;                              
+        symbol = _symbol;  
         balances[msg.sender] = totalSupply;
     }
     
