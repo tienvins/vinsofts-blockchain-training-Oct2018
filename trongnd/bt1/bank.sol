@@ -11,15 +11,16 @@ contract Bank1 {
         owner = msg.sender;
     }
     
-    function ChangeNameBank(string _bankName) {
+    function ChangeNameBank(string _bankName) public {
         require(msg.sender == owner);
         bankName = _bankName;
     }
+    
 }
 
-interface Bank1interface {
-    function GuiTien(address _to, uint256 _money);
-    function RutTien(uint256 _money);
+interface Bank1interface  {
+    function GuiTien(address _to, uint256 _money) external;
+    function RutTien(uint256 _money) external;
 }
 
 contract Bank2 is Bank1, Bank1interface {
@@ -63,7 +64,8 @@ contract Bank2 is Bank1, Bank1interface {
         "Không đủ tiền");
         _;
     }
-    function DangKyTaiKhoan(string _nameUser){
+    
+    function DangKyTaiKhoan(string _nameUser) public{
         require(OwnerToUser[msg.sender].ownerCustomer==0x0, "chua co tai khoan");
         uint moneyUs = 0;
         Customer memory customer = Customer(_nameUser, moneyUs, msg.sender);
@@ -90,19 +92,19 @@ contract Bank2 is Bank1, Bank1interface {
         return data;
     }
     
-    function GuiTien(address _to, uint256 _money) checkAcc() checkMoney(_money){
+    function GuiTien(address _to, uint256 _money) public checkAcc() checkMoney(_money){
         OwnerToUser[_to].totalMoneyCustomer += _money;
         OwnerToUser[msg.sender].totalMoneyCustomer -= _money;
         transactions.push(Transaction(msg.sender, _to, _money, uint64 (now)));
-        EvGuiTienThanhCong(msg.sender, _to, _money);
+        emit EvGuiTienThanhCong(msg.sender, _to, _money);
     }
     
    
-    function RutTien(uint256 _money) checkMoney(_money){
+    function RutTien(uint256 _money) public checkMoney(_money){
         OwnerToUser[msg.sender].totalMoneyCustomer -= _money;
         transactions.push(Transaction(msg.sender, 0, _money, uint64 (now)));
         totalMoney -= _money;
-        EvRutTienThanhCong(msg.sender, _money);
+        emit EvRutTienThanhCong(msg.sender, _money);
     }
     
 }
