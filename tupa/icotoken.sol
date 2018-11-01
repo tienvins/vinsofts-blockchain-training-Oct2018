@@ -42,9 +42,9 @@ contract ICOToken is Token {
     }
     
     modifier checkSoldToken(){
-        require(getCurrentICOPhase()==1&&msg.value/price1 <= maxTokenSale1-buyToken1
-                || getCurrentICOPhase()==2&&msg.value/price2 <= maxTokenSale2-buyToken2
-                || getCurrentICOPhase()==3&&msg.value/price3 <= maxTokenSale3-buyToken3
+        require(getCurrentICOPhase()==1 && msg.value/price1 <= maxTokenSale1-buyToken1
+                || getCurrentICOPhase()==2 && msg.value/price2 <= maxTokenSale2-buyToken2
+                || getCurrentICOPhase()==3 && msg.value/price3 <= maxTokenSale3-buyToken3
                 ,"Token đã bán hết");
         _;
     }

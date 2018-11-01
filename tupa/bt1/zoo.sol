@@ -38,17 +38,21 @@ contract Zoo is Animals{
     function Sleep() public;
 }
 contract AnimalsGrown is Zoo {
+    
     function Sleep() public{
         toAnimals[msg.sender].status = true;
     }
+    
     function getInfoZoo() public view returns(Animals _Animals){
         _Animals = toAnimals[msg.sender];
     }
+    
     function Training() public {
         toAnimals[msg.sender].age += 1;
         toAnimals[msg.sender].weight +=1;
         toAnimals[msg.sender].coolDownTime += 1 minutes;
     }
+    
     function Eat(address _address) attackZoo(_address) public {
         if(toAnimals[_address].status == false){
             if(toAnimals[msg.sender].age == toAnimals[_address].age){

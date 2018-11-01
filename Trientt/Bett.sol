@@ -1,46 +1,44 @@
 pragma solidity ^0.4.23;
 contract Bett{
-    address public con = this; 
+    address public con = this;
+    address public owner = msg.sender;
     struct infor{
-        string name;
         address adres;
         uint number;
-        uint money;
     }
     infor[] public listPeople;
     infor[] public listPeoplee;
-    mapping(address => uint) balances;
+    mapping(uint => address[]) listWin;
     uint nonce;
-        modifier check(infor[] list){
-        require(list.length == 3);
-        _;
-        
-    }
     // random tu 0 -> 2
     function random() internal returns (uint) {
-        uint random = uint(keccak256(now, msg.sender, nonce)) % 3;
+        uint random = uint(keccak256(now, msg.sender, nonce)) % 10;
         nonce++;
         return random;
     }
-    function betting(string _name, uint _number) public payable {
+    function betting(uint _number)  public payable {
+        require(msg.value >= 1 ether && msg.value > 0);
+        require(msg.sender.balance > 0);
         require(msg.sender.balance > msg.value);
-        require(_number < 3,"số dự đoán phải từ 0 -> 2");
-        listPeople.push(infor(_name,msg.sender,_number,msg.value));
+        require(_number >=0 && _number <10);
+        listWin[_number].push(msg.sender);
+        listPeople.push(infor(msg.sender,_number));
+        run();
     }
-    function run() check(listPeople)  public payable returns(string _nameWin, address _adresWin){
+    function run() public payable{
+        if(listPeople.length == 3){
         uint result = random();
-        address win;
-        for(uint i = 0; i <listPeople.length; i++){
-            if(listPeople[i].number == result){
-                 win = listPeople[i].adres;
-                _nameWin = listPeople[i].name;
-                _adresWin= listPeople[i].adres;
-                listPeople[i].adres.transfer(con.balance);  // chuyen tien tu contract den acount
+        address[] memory lisAdresWin = listWin[result];
+            if(lisAdresWin.length > 0){
+                uint amountMoneyWin = con.balance/lisAdresWin.length;
+                    for(uint i =0; i <lisAdresWin.length; i ++){
+                        lisAdresWin[i].transfer(amountMoneyWin);
+                    }
+                listPeople = listPeoplee;
+                }
+            else {
+                owner.transfer(con.balance);
             }
         }
-        listPeople = listPeoplee;
-    }
-    function get() public returns(uint a){
-        a =  listPeople.length;
     }
 }
