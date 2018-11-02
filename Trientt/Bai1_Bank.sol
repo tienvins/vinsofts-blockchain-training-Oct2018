@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+﻿pragma solidity ^0.4.23;
 pragma  experimental ABIEncoderV2;
 contract Bank{
     string  name;
@@ -46,8 +46,9 @@ contract Bank2 is Bank,func{
     user[]  listUser;
     history[]  listHis;
     //chức năng đăng ký
-    mapping (address => uint) checkExit;
-    mapping(address => uint)  _addToIndex;
+    mapping (address => uint) checkExit; //check aaddress đã đăng ký chưa
+    mapping(address => uint)  _addToIndex; //đánh chỉ mục cho mảng listUser
+    mapping(address => history[]) listHisByAdres; // lấy ra list his theo address
     uint indexx = 0;
     function singIn(string name, uint _balancs) public{
         require(msg.sender != owner);
@@ -55,7 +56,6 @@ contract Bank2 is Bank,func{
         user memory u = user(name,msg.sender,_balancs);
         listUser.push(u);
         checkExit[msg.sender] = 1; // check da dang ky
-        //_userMap[msg.sender] = u;
         _addToIndex[msg.sender] = indexx;
         indexx ++;
     }
@@ -77,7 +77,9 @@ contract Bank2 is Bank,func{
          require(msg.sender != owner);
          listUser[_addToIndex[msg.sender]].balancs -=_amount;  // trừ tiền trong list user để get ra user luôn chính 
          listUser[_addToIndex[_to]].balancs +=_amount;
-         listHis.push(history("send money",msg.sender,_to,_amount,now)); // save history
+         //listHis.push(history("send money",msg.sender,_to,_amount,now)); // save history
+         listHisByAdres[msg.sender].push(history("send money",msg.sender,_to,_amount,now));
+         listHisByAdres[_to].push(history("receive money",msg.sender,_to,_amount,now));
         return true;
     }
     //rút tiền  and  save history
@@ -87,27 +89,17 @@ contract Bank2 is Bank,func{
         require(listUser[_addToIndex[msg.sender]].balancs > _amount );
         require(_amount > 0);
         listUser[_addToIndex[msg.sender]].balancs -=_amount;
-        listHis.push(history("receive money",msg.sender,address(0),_amount,now)); // save history
+        //listHis.push(history("receive money",msg.sender,address(0),_amount,now)); // save history
+        listHisByAdres[msg.sender].push(history("receive money",msg.sender,address(0),_amount,now));
         return true;
     }
     function getHis() public view returns(history[]){
         require(msg.sender != owner);
         require(checkExit[msg.sender] !=0);
-         history[] memory lisH = new history[](listHis.length);
-         uint j = 0;
-        if(listHis.length > 0){
-        for(uint i = 0 ; i < listHis.length; i++){
-            if(listHis[i]._from == msg.sender){
-                lisH[j] = listHis[i];
-                j++;
-            }
-        }
-        return lisH;
-        }
+        return listHisByAdres[msg.sender];
         
     }
     
     
     
 }
-
