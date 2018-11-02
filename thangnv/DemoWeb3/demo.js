@@ -222,8 +222,8 @@ const VinToken =  new web3.eth.Contract([
 var acc1= '0x3119340f57bE15cD1Fd53bC88B080C786434C327';
 var acc2= '0xE59E920EaB4Da243145a270D0B8c0D3fe8a41e8e';
 
-// VinToken.methods.balanceOf(acc1).call(console.log);
-// VinToken.methods.balanceOf(acc2).call(console.log);
+VinToken.methods.balanceOf(acc1).call(console.log);
+VinToken.methods.balanceOf(acc2).call(console.log);
 
 web3.eth.getTransactionCount(acc1).then(nonce=>{
 	method = VinToken.methods.transfer(acc2,1000).encodeABI();
@@ -232,7 +232,7 @@ web3.eth.getTransactionCount(acc1).then(nonce=>{
 		to: '0xfca76d084d06ba64da03f156cf97f51ba5ed8f6c',
 		// value:web3.utils.toHex(web3.utils.toWei('1','ether')),
 		gasLimit: web3.utils.toHex('973182'),
-    gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
+    	gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
 		data: method
 	}
 
@@ -242,5 +242,5 @@ web3.eth.getTransactionCount(acc1).then(nonce=>{
 	var serializedTx = transaction.serialize();
 	var raw= '0x'+transaction.serialize().toString('hex')
 
-	web3.eth.sendSignedTransaction(raw).on('receipt', console.log);
+	web3.eth.sendSignedTransaction(raw).then(console.log);
 });
