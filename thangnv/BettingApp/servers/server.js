@@ -27,7 +27,7 @@ app.post('/api/register',(req,res)=>{
     var rawTransaction= {
       nonce: web3.utils.toHex(nonce),
       to: Betting.addressContract,
-      value:web3.utils.toHex(web3.utils.toWei('1','ether')),
+      value:web3.utils.toHex(web3.utils.toWei(req.body.numberEther,'ether')),
       gasLimit: web3.utils.toHex('973182'),
       gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
       data: method
@@ -39,15 +39,19 @@ app.post('/api/register',(req,res)=>{
     var serializedTx = transaction.serialize();
     var raw= '0x'+transaction.serialize().toString('hex')
   
-    web3.eth.sendSignedTransaction(raw).then(console.log);
-    
-    // BettingContract.events.registered(req.body.address,req.body.number).then((error, result)=>{
-    //     if(error) { console.log(error);} 
-    //     else { console.log('Event setVal:', result);}
-    // });
-  });
-
+    web3.eth.sendSignedTransaction(raw).then((block)=>{
   
+      BettingContract.getPastEvents('registered', {
+        fromBlock: block.blockNumber,
+        toBlock: block.blockNumber,
+      }, function(error, events){ console.log(events); })
+      .then(function(events){
+          console.log(events);
+          res.end('ok')
+      });
+
+   });
+  });
 })
 
 app.get('/api/history',(req,res)=>{

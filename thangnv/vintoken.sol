@@ -1,5 +1,40 @@
 pragma solidity ^0.4.25;
 
+library SafeMath {
+
+  function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+    if (a == 0) {
+      return 0;
+    }
+    uint256 c = a * b;
+    require(c / a == b);
+    return c;
+  }
+
+  function div(uint256 a, uint256 b) internal pure returns (uint256) {
+    require(b > 0);
+    uint256 c = a / b;
+    return c;
+  }
+
+  function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+    require(b <= a);
+    uint256 c = a - b;
+    return c;
+  }
+
+  function add(uint256 a, uint256 b) internal pure returns (uint256) {
+    uint256 c = a + b;
+    require(c >= a);
+    return c;
+  }
+
+  function mod(uint256 a, uint256 b) internal pure returns (uint256) {
+    require(b != 0);
+    return a % b;
+  }
+}
+
 contract Token {
 
     function totalSupply() constant returns (uint256 supply) {}
@@ -21,6 +56,7 @@ contract Token {
 }
 contract StandardToken is Token {
     
+    using SafeMath for uint;
     
     uint256 public totalSupply;
     
@@ -33,15 +69,15 @@ contract StandardToken is Token {
     }
     
     function transfer(address _to, uint _tokens) public checkNumberToken(_tokens) returns (bool) {
-        Owner[msg.sender]  -=  _tokens;
-        Owner[_to]          +=  _tokens;
+        Owner[msg.sender]= Owner[msg.sender].sub(_tokens);
+        Owner[_to]= Owner[_to].add(_tokens);
         emit Transfer(msg.sender, _to, _tokens);
     }
     
     function transferFrom(address _from, address _to, uint _tokens)public checkAllowance(_from,_tokens) returns (bool){
-        Owner[_from]                    -=  _tokens;
-        allowed[_from][msg.sender]      -=  _tokens;
-        Owner[_to]                      +=  _tokens;
+        Owner[_from]= Owner[_from].sub(_tokens);
+        allowed[_from][msg.sender]= allowed[_from][msg.sender].sub(_tokens);
+        Owner[_to]= Owner[_to].add(_tokens);
         emit Transfer(_from, _to, _tokens);
     }
     

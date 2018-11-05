@@ -47,7 +47,7 @@ contract Betting{
         Owner memory owner = Owner(msg.sender, _number, msg.value);
         Owners.push(owner);
         ToOwner[msg.sender]=owner;
-        emit registered(msg.sender, _number);
+        emit registered(msg.sender, _number, msg.value/ 1 ether);
         if(Owners.length==numberOwner){
             run();
         }
@@ -57,8 +57,8 @@ contract Betting{
         return(this.balance);
     }
     
-    function getInfoBetting() view returns(Owner[]){
-        return(Owners);
+    function getInfoBetting() view returns(uint,Owner[]){
+        return(numberOwner,Owners);
     }
     
     function getHistory() view returns(History[]){
@@ -112,5 +112,5 @@ contract Betting{
         _;
     }
     
-    event registered(address _owner, uint _number);
+    event registered(address _owner, uint _number, uint _ether);
 }
