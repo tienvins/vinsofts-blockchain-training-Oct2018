@@ -1,5 +1,23 @@
-pragma solidity ^0.4.23;
+﻿pragma solidity ^0.4.23;
 pragma  experimental ABIEncoderV2;
+library SafeMath {
+    function add(uint a, uint b) internal pure returns (uint c) {
+        c = a + b;
+        require(c >= a);
+    }
+    function sub(uint a, uint b) internal pure returns (uint c) {
+        require(b <= a);
+        c = a - b;
+    }
+    function mul(uint a, uint b) internal pure returns (uint c) {
+        c = a * b;
+        require(a == 0 || c / a == b);
+    }
+    function div(uint a, uint b) internal pure returns (uint c) {
+        require(b > 0);
+        c = a / b;
+    }
+}
 contract Bank{
     string  name;
     uint  money;
@@ -10,11 +28,11 @@ contract Bank{
         money = 100000;
         owner = msg.sender;
     }
-    modifier checkName(){
+    modifier checkOwner(){
         require(msg.sender == owner,"ban ko phai chu nhan bank");
         _;
     }
-    function editName(string _name) checkName() public{
+    function editName(string _name) checkOwner() public{
         name = _name;
     }
     function getInfor() public view returns(string _name,address _owner,uint _money) {
@@ -30,6 +48,11 @@ interface func{
 }
 
 contract Bank2 is Bank,func{
+    using SafeMath for uint;
+    mapping (address => uint) checkExit; //check aaddress đã đăng ký chưa
+    mapping(address => uint)  _addToIndex; //đánh chỉ mục cho mảng listUser
+    mapping(address => history[]) listHisByAdres; // lấy ra list his theo address
+    constructor(string _bankName) Bank(_bankName) public {}
     struct history{
         string status;
         address _from;
@@ -37,7 +60,6 @@ contract Bank2 is Bank,func{
         uint value;
         uint time;
     }
-    constructor(string _bankName) Bank(_bankName) public {}
     struct user{
         string nameUser;
         address idUser;
@@ -45,10 +67,6 @@ contract Bank2 is Bank,func{
     }
     user[]  listUser;
     history[]  listHis;
-    //chức năng đăng ký
-    mapping (address => uint) checkExit; //check aaddress đã đăng ký chưa
-    mapping(address => uint)  _addToIndex; //đánh chỉ mục cho mảng listUser
-    mapping(address => history[]) listHisByAdres; // lấy ra list his theo address
     uint indexx = 0;
     function singIn(string name, uint _balancs) public{
         require(msg.sender != owner);
@@ -66,7 +84,7 @@ contract Bank2 is Bank,func{
         return listUser[_addToIndex[msg.sender]];
     }
     //chức năng lấy danh sách khách hàng
-    function getListUser() checkName() public view returns(user[]){
+    function getListUser() checkOwner() public view returns(user[]){
         return listUser;
     }
     //chức năng gửi tiền cho 1 tài khoản khác and  save history
@@ -76,8 +94,8 @@ contract Bank2 is Bank,func{
          require(listUser[_addToIndex[msg.sender]].balancs > _amount );
          require(_amount > 0);
          require(msg.sender != owner);
-         listUser[_addToIndex[msg.sender]].balancs -=_amount;  // trừ tiền trong list user để get ra user luôn chính 
-         listUser[_addToIndex[_to]].balancs +=_amount;
+         listUser[_addToIndex[msg.sender]].balancs =listUser[_addToIndex[msg.sender]].balancs.sub(_amount);  // trừ tiền trong list user để get ra user luôn chính xác 
+         listUser[_addToIndex[_to]].balancs =listUser[_addToIndex[_to]].balancs.add(_amount);
          //listHis.push(history("send money",msg.sender,_to,_amount,now)); // save history
          listHisByAdres[msg.sender].push(history("send money",msg.sender,_to,_amount,now)); //thêm  vào listHisByAdres theo adress
          listHisByAdres[_to].push(history("receive money",msg.sender,_to,_amount,now)); //thêm  vào listHisByAdres theo adress
@@ -91,7 +109,7 @@ contract Bank2 is Bank,func{
         require(msg.sender != owner);
         require(listUser[_addToIndex[msg.sender]].balancs > _amount );
         require(_amount > 0);
-        listUser[_addToIndex[msg.sender]].balancs -=_amount;
+        listUser[_addToIndex[msg.sender]].balancs =listUser[_addToIndex[msg.sender]].balancs.sub(_amount);
         //listHis.push(history("receive money",msg.sender,address(0),_amount,now)); // save history
         listHisByAdres[msg.sender].push(history("receive money",msg.sender,address(0),_amount,now));
         emit received(msg.sender,_amount);
