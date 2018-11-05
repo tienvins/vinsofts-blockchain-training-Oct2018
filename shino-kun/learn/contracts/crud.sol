@@ -25,7 +25,7 @@ contract UserCrud {
     );
 
 
-    function isUser(address userAddress) public constant returns (bool isIndeed){
+    function isUser(address userAddress) public view returns (bool isIndeed){
         if (userIndex.length == 0) return false;
         return (userIndex[userStructs[userAddress].index] == userAddress);
     }
@@ -50,7 +50,7 @@ contract UserCrud {
         return userIndex.length - 1;
     }
 
-    function getUser(address userAddress) public constant returns (bytes32 userEmail, uint userAge, uint index){
+    function getUser(address userAddress) public view returns (bytes32 userEmail, uint userAge, uint index){
         if(!isUser(userAddress)) throw;
         return (
             userStructs[userAddress].userEmail,
@@ -62,7 +62,7 @@ contract UserCrud {
     function updateUserEmail(
         address userAddress, 
         bytes32 userEmail
-    ) public constant returns (bool success){
+    ) public returns (bool success){
         if(!isUser(userAddress)) throw;
         userStructs[userAddress].userEmail = userEmail;
 
@@ -75,7 +75,7 @@ contract UserCrud {
         return true;
     }
 
-    function deleteUser(address userAddress) constant returns (bool success){
+    function deleteUser(address userAddress) public returns (bool success){
         uint rowToDelete = userStructs[userAddress].index;
         address keyToMove = userIndex[userIndex.length-1];
         userIndex[rowToDelete] = keyToMove;
@@ -93,7 +93,7 @@ contract UserCrud {
         return userIndex.length;
     }
 
-    function getListUserAddress() public constant returns (address[] list){
+    function getListUserAddress() public  returns (address[] list){
         return userIndex;
     }
 
