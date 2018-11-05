@@ -1,17 +1,19 @@
-pragma solidity ^0.4.23;
+﻿pragma solidity ^0.4.23;
 contract Bett{
-    address public con = this;
-    address public owner = msg.sender;
+    address public owner;
     struct infor{
         address adres;
         uint number;
     }
     infor[] public listPeople;
-    infor[] public listPeoplee;
+    mapping(address => uint) public playerToNumber; //check mỗi ng chỉ đc đặt 1 lần
     mapping(uint => address[]) listWin;
     uint nonce;
-    // random tu 0 -> 2
+    constructor() public{
+        owner = msg.sender;
+    }
     modifier check(uint _number){
+        require(playerToNumber[msg.sender] == 0);  //check mỗi ng chỉ đc đặt 1 lần
         require(msg.value >= 1 ether);
         require(_number >0 && _number <11);
         _;
@@ -22,23 +24,25 @@ contract Bett{
         return random;
     }
     function betting(uint _number) check(_number)  public  payable{
-        listWin[_number].push(msg.sender);
+        playerToNumber[msg.sender] = _number;   //check mỗi ng chỉ đc đặt 1 lần
+        listWin[_number].push(msg.sender);  // list ng đặt cùng 1 số
         listPeople.push(infor(msg.sender,_number));
         run();
     }
     function run() internal{
-        if(listPeople.length == 3){
+        if(listPeople.length == 10){
         uint result = random();
         address[] memory lisAdresWin = listWin[result];
             if(lisAdresWin.length > 0){
-                uint amountMoneyWin = con.balance/lisAdresWin.length;
+                uint amountMoneyWin = this.balance/lisAdresWin.length;
                     for(uint i =0; i <lisAdresWin.length; i ++){
                         lisAdresWin[i].transfer(amountMoneyWin);
                     }
                 listPeople.length = 0;
                 }
             else {
-                owner.transfer(con.balance);
+                owner.transfer(this.balance);
+                listPeople.length = 0;
             }
         }
     }
