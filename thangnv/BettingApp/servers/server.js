@@ -35,21 +35,17 @@ app.post('/api/register',(req,res)=>{
   
     var transaction= new Tx(rawTransaction);
     transaction.sign(Buffer.from(req.body.privateKey,'hex'));
-  
-    var serializedTx = transaction.serialize();
+
     var raw= '0x'+transaction.serialize().toString('hex')
   
     web3.eth.sendSignedTransaction(raw).then((block)=>{
-  
       BettingContract.getPastEvents('registered', {
         fromBlock: block.blockNumber,
         toBlock: block.blockNumber,
-      }, function(error, events){ console.log(events); })
-      .then(function(events){
+      }).then(function(events){
           console.log(events);
-          res.end('ok')
+          res.send('Mes: registered')
       });
-
    });
   });
 })
