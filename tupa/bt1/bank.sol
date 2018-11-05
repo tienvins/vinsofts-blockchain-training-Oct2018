@@ -14,18 +14,20 @@ contract Bank {
         amount = 1000;
         owner = msg.sender;
     }
+
     function changeNameBank(string _bankName) {
         require(msg.sender == owner);
         bankName = _bankName;
     }
+    
     function infoBank() public view returns(string, uint, address){
         return (bankName, amount, owner);
     }
 }
 
 interface BankInterface {
-    function GuiTien(address _to,uint _money);
-    function RutTien(uint _money);
+    function transfer(address _to,uint _money);
+    function withdraw(uint _money);
 }
 
 contract Bank2 is Bank {
@@ -69,7 +71,7 @@ contract Bank2 is Bank {
     }
     
     //should be using lowercase for first characters
-    function DangKyUser(string _nameUser) public {
+    function Register(string _nameUser) public {
         User memory user = User(_nameUser, 1000, msg.sender);   //tao doi tuong
         uint id = users.push(user) - 1;
         amount += 1000;
@@ -83,21 +85,21 @@ contract Bank2 is Bank {
         return (user.userName, user.amountUser);
     }
     
-    function GuiTien(address _to, uint _money) checkAcc() checkMoney(_money){
+    function transfer(address _to, uint _money) checkAcc() checkMoney(_money){
         OwnerToUser[_to].amountUser += _money;
         OwnerToUser[msg.sender].amountUser -= _money;
         transaction.push(Transaction(msg.sender, _to, _money, uint(now)));
         EvGuiTienThanhCong(msg.sender, _to, _money);
     }
     
-    function RutTien(uint _money) checkMoney(_money){
+    function withdraw(uint _money) checkMoney(_money){
         OwnerToUser[msg.sender].amountUser -= _money;
         transaction.push(Transaction(msg.sender, 0 , _money, uint(now)));
         EvRutTienThanhCong(msg.sender, _money);
     }
     
     //so, as i know, this function return array id => so, how can i find detail of transaction?
-    function GetTransactionHistory() public view returns (uint[]) {
+    function getTransactionHistory() public view returns (uint[]) {
         uint[] memory data = new uint[](transaction.length);
         uint counter = 0;
         for(uint i=0; i < transaction.length; i++){
