@@ -1,6 +1,6 @@
 const Web3= require('web3');
 const Tx = require('ethereumjs-tx');
-const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/2ea352f51b5a45819be9923cdfb58894"));
 const abi=[
 	{
 		"constant": false,
@@ -23,6 +23,89 @@ const abi=[
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_number",
+				"type": "uint256"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "sendMoneyToContract",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_number",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"name": "_ether",
+				"type": "uint256"
+			}
+		],
+		"name": "registered",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"name": "time",
+						"type": "uint256"
+					},
+					{
+						"name": "id",
+						"type": "address"
+					},
+					{
+						"name": "number",
+						"type": "uint256"
+					},
+					{
+						"name": "addmoney",
+						"type": "uint256"
+					}
+				],
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -70,92 +153,9 @@ const abi=[
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "sendMoneyToContract",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getHistory",
-		"outputs": [
-			{
-				"components": [
-					{
-						"name": "time",
-						"type": "uint256"
-					},
-					{
-						"name": "id",
-						"type": "address"
-					},
-					{
-						"name": "number",
-						"type": "uint256"
-					},
-					{
-						"name": "addmoney",
-						"type": "uint256"
-					}
-				],
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_number",
-				"type": "uint256"
-			}
-		],
-		"name": "register",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "_owner",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "_number",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"name": "_ether",
-				"type": "uint256"
-			}
-		],
-		"name": "registered",
-		"type": "event"
 	}
 ];
-const addressContract='0xb64768440acfa50521304503734e19bf41c57209';
+const addressContract='0x612370f4bef72134b91231140ebd8d03b0e4257a';
 BettingContract= new web3.eth.Contract(abi, addressContract);
 module.exports = {
 	web3, Tx, BettingContract, addressContract

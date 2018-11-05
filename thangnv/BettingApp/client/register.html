@@ -23,15 +23,70 @@
       margin-top: 0.5em;
     }
   
-  </style>
+    #loader {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 1;
+      width: 35px;
+      height: 75px;
+      margin: -75px 0 0 -75px;
+      border-top: 5px solid blue;
+      border-right: 5px solid green;
+      border-bottom: 5px solid yellow;
+      border-left: 5px solid red;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      -webkit-animation: spin 2s linear infinite;
+      animation: spin 2s linear infinite;
+    }
+
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Add animation to "page content" */
+    .animate-bottom {
+      position: relative;
+      -webkit-animation-name: animatebottom;
+      -webkit-animation-duration: 1s;
+      animation-name: animatebottom;
+      animation-duration: 1s
+    }
+
+    @-webkit-keyframes animatebottom {
+      from { bottom:-100px; opacity:0 } 
+      to { bottom:0px; opacity:1 }
+    }
+
+    @keyframes animatebottom { 
+      from{ bottom:-100px; opacity:0 } 
+      to{ bottom:0; opacity:1 }
+    }
+
+    #myDiv {
+      display: none;
+      text-align: center;
+    }
+</style>
+
 
 </head>
 
 <body>
 
-  <div class="container">
+  <div id="loader"></div>
 
-    <h1 class="title-page" >Betting App BlockChain</h1>
+  <div style="display:none;" class="container animate-bottom" id="content-page">
+
+    <h1 class="title-page">Betting App BlockChain</h1>
 
     <div class="row">
       <!-- Register -->
@@ -62,7 +117,7 @@
               </div>
             </form>
             <div>
-                  <button id="register" class="btn btn-primary btn-custom" onclick="postRegister()">Register</button>
+              <button id="register" class="btn btn-primary btn-custom" onclick="postRegister()">Register</button>
             </div>
           </div>
         </div>
@@ -169,18 +224,36 @@
     }
 
     function postRegister() {
+      showLoad();
       $.post('http://localhost:3000/api/register', $('#formRegister').serialize(), function (data) {
         console.log(data);
         getInfoBetting();
         getHistory();
+        showPage();
         document.getElementById("formRegister").reset();
       })
     }
 
+    function loading() {
+      myVar = setTimeout(showPage, 1000);
+    }
+
+    function showPage() {
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("content-page").style.display = "block";
+    }
+
+    function showLoad() {
+      document.getElementById("loader").style.display = "block";
+      document.getElementById("content-page").style.display = "none";
+    }
+
     $(document).ready(function () {
+      setTimeout(showPage, 1000);
       getInfoBetting();
       getHistory();
     });
+
   </script>
 
 </body>
