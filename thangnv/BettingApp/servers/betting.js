@@ -104,9 +104,26 @@ const abi=[
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "number",
+				"type": "uint256"
+			}
+		],
+		"name": "registered",
+		"type": "event"
 	}
 ];
-const addressContract='0x2a4b1d9d92841b5e78d1eadbbfdb75b28b25efce';
+const addressContract='0x1ee1fa92d62872882e16e3dc11b84bc7e9b69255';
 BettingContract= new web3.eth.Contract(abi, addressContract);
 module.exports = {
 	web3, Tx, BettingContract, addressContract
