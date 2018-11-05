@@ -42,7 +42,7 @@ contract Betting{
                 total += (Owners[i].money*2);
             }
         }
-        require(this.balance>=(total+(msg.value*2)+ 1 ether ),"Nếu bạn đc chọn Contract không đủ tiền trả .");
+        require(this.balance>=(total+(msg.value*2)),"Nếu bạn đc chọn Contract không đủ tiền trả .");
         
         Owner memory owner = Owner(msg.sender, _number, msg.value);
         Owners.push(owner);
