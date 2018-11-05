@@ -35,25 +35,25 @@ contract ICOVinTokenSale is VinToken{
         
         timeFrom1   =   now;
         timeTo1     =   now+ 1 days;
-        maxToken1   =   totalToken*15/100; 
+        maxToken1   =   totalSupply*15/100; 
         buyToken1   =   0;    
         totalEther1 =   0;
         
         timeFrom2   =   now+7 days;
         timeTo2     =   now+ 8 days;
-        maxToken2   =   totalToken*10/100; 
+        maxToken2   =   totalSupply*10/100; 
         buyToken2   =   0;  
         totalEther2 =   0;
         
         timeFrom3   =   now+14 days;
         timeTo3     =   now+ 15 days;
-        maxToken3   =   totalToken*5/100; 
+        maxToken3   =   totalSupply*5/100; 
         buyToken3   =   0; 
         totalEther3 =   0;
         
         timeFrom4   =   now+21 days;
         timeTo4     =   now+ 22 days;
-        maxToken4   =   totalToken*3/100; 
+        maxToken4   =   totalSupply*3/100; 
         buyToken4   =   0; 
         totalEther4 =   0;
         
@@ -106,8 +106,8 @@ contract ICOVinTokenSale is VinToken{
         
         uint tokens= msg.value/price;
         tokenOwner.transfer(msg.value);
-        toOwner[tokenOwner].tokenOwner-=tokens;
-        toOwner[msg.sender].tokenOwner+=tokens;
+        Owner[tokenOwner]-=tokens;
+        Owner[msg.sender]+=tokens;
         addBuy(tokens,msg.value/1 ether);
         return true;
         
@@ -140,7 +140,6 @@ contract ICOVinTokenSale is VinToken{
     }
     
     modifier checkEther(){
-        
          require(msg.value>=price,"Số Ether phải lớn hơn hoặc bằng 1 finney");
          require(msg.value%price==0,"Số Ether phải là bội của 1 finney");
         _;
