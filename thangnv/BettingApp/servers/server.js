@@ -41,9 +41,13 @@ app.post('/api/register',(req,res)=>{
   
     web3.eth.sendSignedTransaction(raw).then(console.log);
     
+    // BettingContract.events.registered(req.body.address,req.body.number).then((error, result)=>{
+    //     if(error) { console.log(error);} 
+    //     else { console.log('Event setVal:', result);}
+    // });
   });
 
-  res.redirect('/register');
+  
 })
 
 app.get('/api/history',(req,res)=>{

@@ -1,84 +1,94 @@
 pragma solidity ^0.4.25;
 
-contract VinToken{
+contract Token {
+
+    function totalSupply() constant returns (uint256 supply) {}
+
+    function balanceOf(address _owner) constant returns (uint256 balance) {}
+
+    function transfer(address _to, uint256 _value) returns (bool success) {}
+
+    function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {}
+
+    function approve(address _spender, uint256 _value) returns (bool success) {}
+
+    function allowance(address _owner, address _spender) constant returns (uint256 remaining) {}
+
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
     
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+
+}
+contract StandardToken is Token {
+    
+    
+    uint256 public totalSupply;
+    
+    mapping(address=>uint)Owner;
+    
+    mapping(address => mapping(address => uint)) allowed;
+    
+    function balanceOf (address _owner) public view returns (uint){
+        return Owner[_owner];
+    }
+    
+    function transfer(address _to, uint _tokens) public checkNumberToken(_tokens) returns (bool) {
+        Owner[msg.sender]  -=  _tokens;
+        Owner[_to]          +=  _tokens;
+        emit Transfer(msg.sender, _to, _tokens);
+    }
+    
+    function transferFrom(address _from, address _to, uint _tokens)public checkAllowance(_from,_tokens) returns (bool){
+        Owner[_from]                    -=  _tokens;
+        allowed[_from][msg.sender]      -=  _tokens;
+        Owner[_to]                      +=  _tokens;
+        emit Transfer(_from, _to, _tokens);
+    }
+    
+    function approve(address _spender, uint _tokens)public checkNumberToken(_tokens) returns (bool){
+        allowed[msg.sender][_spender]   =   _tokens;
+        emit Approval(msg.sender, _spender, _tokens);
+    }
+    
+    function allowance (address _owner, address _spender)public view returns (uint){
+        return allowed[_owner][_spender];
+    }
+    
+    
+    modifier checkNumberToken(uint _tokens){
+        require(Owner[msg.sender]>=_tokens,"Số token của bạn nhỏ hơn số  bạn đang chọn ");
+        _;
+    }
+    
+    modifier checkAllowance(address _from,uint _tokens){
+        require(Owner[_from]>=_tokens,"Số token của người ủy quyền  không  đủ");
+        require(allowance(_from,msg.sender)>=_tokens,"Số token được ủy quyền  cho bạn nhỏ hơn số  bạn đang chọn ");
+        _;
+    }
+}
+
+contract VinToken is StandardToken {
+
     string  public name;
     uint    public decimals;
     string  public symbol;
     uint    public price;
-    uint    public totalToken;
-    
-    struct Owner{
-        address id;
-        uint tokenOwner;
-    }        
-    
-    mapping(address=>Owner)toOwner;
-    
-    mapping(address => mapping(address => uint)) allowed;
-    
-    constructor(){  
+    string public version;
+
+    constructor() {
         name        =   "VinToken";
-        decimals    =   0;
-        totalToken  =   1000000000;
+        decimals    =   18;
+        totalSupply  =   1000000000;
         symbol      =   "Vin";
         price       =   0.001 ether;
-        Owner memory owner  =   Owner(msg.sender,totalToken);
-        toOwner[msg.sender] =   owner;
+        Owner[msg.sender] =   totalSupply;                           
     }
-    
-    function totalSupply() public view returns(uint){
-        return totalToken;
-    }
-    
-    function balanceOf (address _owner) public returns (uint){
-        return toOwner[_owner].tokenOwner;
-    }
-    
-    function transfer(address to, uint tokens) public checkNumberToken(tokens) returns (bool) {
-        
-        toOwner[msg.sender].tokenOwner  -=  tokens;
-        toOwner[to].tokenOwner          +=  tokens;
+
+    function approveAndCall(address _spender, uint256 _value, bytes _extraData) returns (bool success) {
+        allowed[msg.sender][_spender] = _value;
+        Approval(msg.sender, _spender, _value);
+
+        if(!_spender.call(bytes4(bytes32(sha3("receiveApproval(address,uint256,address,bytes)"))), msg.sender, _value, this, _extraData)) { throw; }
         return true;
-        
     }
-    
-    function transferFrom(address _from, address _to, uint _value)public checkAllowance(_from,_value) returns (bool){
-        
-        toOwner[_from].tokenOwner   -=  _value;
-        allowed[_from][msg.sender]  -=  _value;
-        toOwner[_to].tokenOwner     +=  _value;
-        return true;
-        
-    }
-    
-    function approve(address _spender, uint _value)public checkNumberToken(_value) returns (bool){
-        
-        allowed[msg.sender][_spender]   =   _value;
-        return true;
-        
-    }
-    
-    function allowance (address _owner, address _spender)public returns (uint){
-        
-        return allowed[_owner][_spender];
-        
-    }
-    
-    
-    modifier checkNumberToken(uint tokens){
-        
-        require(toOwner[msg.sender].tokenOwner>=tokens,"Số token của bạn nhỏ hơn số  bạn đang chọn ");
-        _;
-        
-    }
-    
-    modifier checkAllowance(address _from,uint tokens){
-        
-        require(toOwner[_from].tokenOwner>=tokens,"Số token của người ủy quyền  không  đủ");
-        require(allowance(_from,msg.sender)>=tokens,"Số token được ủy quyền  cho bạn nhỏ hơn số  bạn đang chọn ");
-        _;
-        
-    }
-    
 }
