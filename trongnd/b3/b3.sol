@@ -3,16 +3,17 @@ pragma solidity ^0.4.25;
 contract CaCuoc{
     
     uint public amount = 0 ether;
-  
-  
     uint quay = 3;
+
     struct Customer{
         uint vis;
         address owner;
     }
+
     struct ownerToNumber{
         address owner;
     }
+
     Customer[] public customers;
     ownerToNumber[] ownertonumbers;
     ownerToNumber[] ownertonumbers2;
@@ -21,15 +22,12 @@ contract CaCuoc{
     mapping(address => uint) playerToNumber;
     mapping(uint => address[]) numberToPlayers;
     
-    
-
-    
-    
     function DangKy() public{
         require(playerToNumber[msg.sender]==0x0,"Bạn đã đăng ký rồi");
         uint8 id = uint8(customers.push(Customer(0, msg.sender)));
         playerToNumber[msg.sender] = id;
     }
+
     function ChonSo(uint _number) public payable{
         require(playerToNumber[msg.sender]!=0x0,"Bạn phải đăng ký trước");
         bool oke = true;
@@ -78,7 +76,4 @@ contract CaCuoc{
         }
     }
    
-    
-    
-    
 }
