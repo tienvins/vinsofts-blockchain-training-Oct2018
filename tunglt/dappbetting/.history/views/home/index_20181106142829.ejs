@@ -1,0 +1,97 @@
+<% include ../layouts/header.ejs %>
+<!-- Header End -->
+<hr>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <p>Số lần trao giải :
+        <%=sovongdaquaythuong%>
+      </p>
+      <p>Số tiền thưởng chưa phát hiện tại :
+        <%=sotiendangcon%>
+      </p>
+      <form method="POST" action="transfer">
+        <div class="form-group">
+          <label>primakey</label>
+          <input type="text" class="form-control" name="privatekey">
+        </div>
+        <div class="form-group">
+          <label>number</label>
+          <input type="number" class="form-control" name="money">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <hr>
+
+      <p>Đang có
+        <%=songchoi%> người cá cược, đủ
+        <%=songsetraothuong%> sẽ trao thưởng</p>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>address</th>
+            <th>number</th>
+            <th>time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% historys.forEach(function(history){ var id = 0; %>
+          <tr>
+            <td>
+              <%=history[0]%>
+            </td>
+            <td>
+              <%=history[1]%>
+            </td>
+            <td>
+              <%=history[2]%>
+            </td>
+          </tr>
+          <% })%>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <p>Lịch sử cá cược của lần trao thưởng
+        <%=sovongdaquaythuong%>
+        
+      </p>
+      <form method="POST">
+        <select name="sovongdaquaythuong" onchange="this.form.submit()">
+          <% for(var i=0; i<sovongdaquaythuong; i++) {%>
+          <option value="<%=i%>"  <%=(req.body.sovongdaquaythuong==i)?'selected':''%></option>>
+            <%=i+1%>
+          </option>
+          <% } %>
+        </select>
+      </form>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>address</th>
+            <th>number</th>
+            <th>time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% historys2.forEach(function(history){ var id = 0; %>
+          <tr>
+            <td>
+              <%=history[0]%>
+            </td>
+            <td>
+              <%=history[1]%>
+            </td>
+            <td>
+              <%=history[2]%>
+            </td>
+          </tr>
+          <% })%>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<hr>
+<!-- Footer -->
+<% include ../layouts/footer.ejs %>

@@ -1,0 +1,68 @@
+<% include ../layouts/header.ejs %>
+<!-- Header End -->
+<hr>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <p>Số  tiền thưởng chưa phát hiện tại : <%=sotiendangcon%></p>
+      <form method="POST" action="transfer">
+        <div class="form-group">
+          <label>primakey</label>
+          <input type="text" class="form-control" name="privatekey">
+        </div>
+        <div class="form-group">
+          <label>number</label>
+          <input type="number" class="form-control" name="money">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <hr>
+
+      <p>Đang có <%=songchoi%> người cá cược, đủ <%=songsetraothuong%> sẽ trao thưởng</p>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>address</th>
+            <th>number</th>
+            <th>time</th>
+          </tr>
+        </thead>
+        <tbody>
+         
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <p>Lịch sử cá cược</p>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>John</td>
+            <td>Doe</td>
+            <td>john@example.com</td>
+          </tr>
+          <tr>
+            <td>Mary</td>
+            <td>Moe</td>
+            <td>mary@example.com</td>
+          </tr>
+          <tr>
+            <td>July</td>
+            <td>Dooley</td>
+            <td>july@example.com</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<hr>
+<!-- Footer -->
+<% include ../layouts/footer.ejs %>

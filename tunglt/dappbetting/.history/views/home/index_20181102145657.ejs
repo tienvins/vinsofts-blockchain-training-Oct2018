@@ -1,0 +1,23 @@
+<% include ../layouts/header.ejs %>
+<!-- Header End -->
+
+<div class="container">
+  <form method="POST" action="transfer">
+    <div class="form-group">
+      <label>address to</label>
+      <input type="text" class="form-control" name="address_to">
+    </div>
+    <div class="form-group">
+      <label>primakey</label>
+      <input type="text" class="form-control" name="privatekey">
+    </div>
+    <div class="form-group">
+      <label>money</label>
+      <input type="number" class="form-control" name="money">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
+
+<!-- Footer -->
+<% include ../layouts/footer.ejs %>
