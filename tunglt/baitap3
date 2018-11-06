@@ -1,35 +1,52 @@
 pragma solidity ^0.4.25;
+pragma experimental ABIEncoderV2;
 
 contract CaCuocs{
     
     uint public amount = 0 ether;
-    uint soNguoiSeQuayThuong = 2;
+    uint public soNguoiSeQuayThuong = 2;
+    uint public sovongdatraothuong = 0;
     struct Customer{
         uint price;
         address owner;
     }
+    
     struct ownerToNumber{
         address owner;
+        uint number;
+        uint time;
     }
+    
     Customer[] customers;
+    
     ownerToNumber[] ownertonumbers;
     ownerToNumber[] ownertonumbers2;
     uint[] cacsodadcchon;
     
     mapping(address => uint) ownerToUserId;
-    mapping(uint => address[]) numberToOwner;
+    mapping(uint => address[]) public numberToOwner;
+    mapping(uint => address[]) numberToOwner2;
+    mapping(uint => ownerToNumber[]) public numberToOwnerLS;
+    
     
     function randMod(uint _modulus) internal returns(uint) {
         return uint(keccak256(now, msg.sender, now % _modulus)) % _modulus;
     }
     
-    function Reg() public{
-        require(ownerToUserId[msg.sender]==0x0,"Bạn đã đăng ký rồi");
-        uint8 id = uint8(customers.push(Customer(0, msg.sender)));
-        ownerToUserId[msg.sender] = id;
+    function getLenthCustomers() public view returns (uint){
+        return ownertonumbers.length;
+    }
+    function getCacuoc() public view returns (ownerToNumber[]){
+         return ownertonumbers;
+    }
+    function getHistory(uint _traothuonglanthumay) public view returns (ownerToNumber[]){
+        return numberToOwnerLS[_traothuonglanthumay];
     }
     function ChonSo(uint _number) public payable{
-        require(ownerToUserId[msg.sender]!=0x0,"Bạn phải đăng ký trước");
+        if(ownerToUserId[msg.sender]==0x0){
+          uint8 id = uint8(customers.push(Customer(0, msg.sender)));
+            ownerToUserId[msg.sender] = id; 
+        }
         bool oke = true;
         for (uint8 i = 0; i < ownertonumbers.length; i++){
             if(ownertonumbers[i].owner == msg.sender){
@@ -37,7 +54,7 @@ contract CaCuocs{
             }
         }
         require(oke==true,"Vui lòng đợi đến khi trao thưởng");
-        ownertonumbers.push(ownerToNumber(msg.sender));
+        ownertonumbers.push(ownerToNumber(msg.sender,_number,now));
         require(msg.value >= 1 ether,"Tối thiểu 1 ether");
         amount +=msg.value;
         numberToOwner[_number].push(msg.sender);
@@ -48,14 +65,15 @@ contract CaCuocs{
     }
     
     function TraoThuong() private {
-        uint rand = 1;
+        uint rand = randMod(10);
+        sovongdatraothuong++;
         address[] adr = numberToOwner[rand];
         if(adr.length>0){
             uint tienthuong = amount/adr.length;
             for (uint8 i = 0; i< adr.length; i++){
-                for (uint8 i2 = 0; i2 < customers.length; i2++){
-                    if(customers[i2].owner == adr[i]){
-                        customers[i2].price +=tienthuong;
+                for (uint8 i2 = 0; i2< ownertonumbers.length; i2++){
+                    if(adr[i]==ownertonumbers[i2].owner){
+                        numberToOwnerLS[sovongdatraothuong].push(ownertonumbers[i2]);
                     }
                 }
             }
@@ -69,6 +87,7 @@ contract CaCuocs{
             delete cacsodadcchon;
             ownertonumbers = ownertonumbers2;
         }
+        
     }
     
     
