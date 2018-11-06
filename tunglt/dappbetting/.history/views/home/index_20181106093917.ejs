@@ -1,0 +1,46 @@
+<% include ../layouts/header.ejs %>
+<!-- Header End -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-7">
+      <form method="POST" action="transfer">
+        <div class="form-group">
+          <label>address to</label>
+          <input type="text" class="form-control" name="address_to">
+        </div>
+        <div class="form-group">
+          <label>primakey</label>
+          <input type="text" class="form-control" name="privatekey">
+        </div>
+        <div class="form-group">
+          <label>money</label>
+          <input type="number" class="form-control" name="money">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+      
+    </div>
+    <div class="col-md-5">
+      <form method="POST" action="transfer">
+        <div class="form-group">
+          <label>address to</label>
+          <input type="text" class="form-control" name="address_to">
+        </div>
+        <div class="form-group">
+          <label>primakey</label>
+          <input type="text" class="form-control" name="privatekey">
+        </div>
+        <div class="form-group">
+          <label>money</label>
+          <input type="number" class="form-control" name="money">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<% include ../layouts/footer.ejs %>
