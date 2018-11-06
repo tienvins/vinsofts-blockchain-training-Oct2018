@@ -36,7 +36,7 @@ app.post('/api/register',(req,res)=>{
     res.send({"status":"error","mess":"Kiem tra lai numberEther"});
   else
     web3.eth.getTransactionCount(req.body.address).then(nonce=>{
-      
+
       method = BettingContract.methods.register(req.body.number).encodeABI();
       var rawTransaction= {
         nonce: web3.utils.toHex(nonce),
@@ -52,15 +52,9 @@ app.post('/api/register',(req,res)=>{
 
       web3.eth.sendSignedTransaction(raw).then((resp)=>{
         console.log(resp);
-        if(resp.status==true){
-          res.send({"status":"success"});
-        }
-        else
-        {
-          res.send({"status":"fail","mess":"That bai. Xin thu lai"});
-        }
+        res.send({"status":"success"});
       }).catch(error => {
-        mess=error.message.split('revert ')[1];
+        mess=error.message;
         console.log(mess);
         res.send({"status":"error","mess":mess});
       });
