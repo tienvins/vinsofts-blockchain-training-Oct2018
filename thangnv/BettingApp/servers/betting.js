@@ -1,6 +1,8 @@
 const Web3= require('web3');
 const Tx = require('ethereumjs-tx');
-const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/2ea352f51b5a45819be9923cdfb58894"));
+// const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/2ea352f51b5a45819be9923cdfb58894"));
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+
 const abi=[
 	{
 		"constant": false,
@@ -155,7 +157,7 @@ const abi=[
 		"type": "function"
 	}
 ];
-const addressContract='0x612370f4bef72134b91231140ebd8d03b0e4257a';
+const addressContract='0x11eb5e643859081ac49ba3f67ec0bcd6c9188b8e';
 BettingContract= new web3.eth.Contract(abi, addressContract);
 module.exports = {
 	web3, Tx, BettingContract, addressContract
