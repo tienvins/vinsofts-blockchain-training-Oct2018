@@ -31,6 +31,11 @@
     .card-header{
       text-align: center;
     }
+
+    label{
+      margin-top: 1em;
+      margin-bottom: 0em;
+    }
     
   
     #loader {
@@ -118,9 +123,20 @@
 
                 </select>
               </div>
-              <div>
-                <label for="numberEther">Ether</label>
-                <input type="number" class="form-control" id="numberEther" name="numberEther" placeholder="">
+              <div style="display: flex">
+                <div>
+                  <label for="numberEther">Ether</label>
+                  <input type="number" class="form-control" id="numberEther" name="numberEther" placeholder="">
+                </div>
+                <div>
+                  <label for="unit">Unit</label>
+                  <select id="unit" name="unit" class="form-control">
+                    <option value="1">wei</option>
+                    <option value="1000000000">gwei</option>
+                    <option value="1000000000000000">finney</option>
+                    <option selected value="1000000000000000000">eth</option>
+                  </select>
+                  </div>
               </div>
             </form>
             <div>
@@ -142,7 +158,7 @@
                 <tr>
                   <th scope="col">Address</th>
                   <th scope="col">Number</th>
-                  <th scope="col">Money</th>
+                  <th scope="col">Money (ETH)</th>
                 </tr>
               </thead>
               <tbody id="tbodyInfoBetting">
@@ -169,7 +185,7 @@
                   <th scope="col">Time</th>
                   <th scope="col">Address</th>
                   <th scope="col">Number</th>
-                  <th scope="col">Money</th>
+                  <th scope="col">Money (ETH)</th>
                 </tr>
               </thead>
               <tbody id="tbodyHistory">
@@ -197,8 +213,7 @@
         });
         tbody = '';
         for (let index = 0; index < data.length; index++) {
-          tbody += '<tr><td>' + data[index][0] + '</td><td>' + data[index][1] + '</td><td>' + data[index][2] +
-            '</td><td>' + data[index][3] + '</td></tr>';
+          tbody += '<tr><td>' + data[index][0] + '</td><td>' + data[index][1] + '</td><td>' + data[index][2] +'</td><td>' + data[index][3]/1000000000000000000 + '</td></tr>';
         }
         $('#tbodyHistory').html(tbody);
       })
@@ -210,10 +225,7 @@
         tbody = '';
 
         for (let index = 0; index < data[1].length; index++) {
-          tbody += '<tr><td>' + data[1][index][0] + '</td><td>' + data[1][index][1] + '</td><td>' + data[1][index]
-            [
-              2
-            ] + '</td></tr>';
+          tbody += '<tr><td>' + data[1][index][0] + '</td><td>' + data[1][index][1] + '</td><td>' + data[1][index][2]/1000000000000000000 + '</td></tr>';
         }
         $('#tbodyInfoBetting').html(tbody);
 

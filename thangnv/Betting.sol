@@ -11,6 +11,7 @@ contract Betting{
     }
     
     function changeNumberOwner(uint _numbeOwner) checkOwner(){
+        require(Owners.length==0,"Ban khong co quyen");
         numberOwner=_numbeOwner;
     }
     
@@ -34,7 +35,7 @@ contract Betting{
     History[] Historys;
     mapping(address => History) ToHistory;
     
-    function register(uint _number) public payable checkAcc() checkValue(_number) {
+    function register(uint _number) public payable checkAcc() {
         
         uint total=0;
         for(uint i=0; i<Owners.length;i++){
@@ -42,12 +43,12 @@ contract Betting{
                 total += (Owners[i].money*2);
             }
         }
-        require(this.balance>=(total+(msg.value*2)),"Nếu bạn đc chọn Contract không đủ tiền trả .");
+        require(this.balance>=(total+(msg.value*2)),"Contract khong du tien de tra neu ban trung");
         
         Owner memory owner = Owner(msg.sender, _number, msg.value);
         Owners.push(owner);
         ToOwner[msg.sender]=owner;
-        emit registered(msg.sender, _number, msg.value/ 1 ether);
+        emit registered(msg.sender, _number, msg.value);
         if(Owners.length==numberOwner){
             run();
         }
@@ -98,17 +99,12 @@ contract Betting{
     }
     
     modifier checkAcc(){
-        require(checkrRegister(msg.sender),"Bạn đã đăng kí");
+        require(checkrRegister(msg.sender),"Ban da dang ki");
         _;
     }
     
     modifier checkOwner(){
-        require(msg.sender==owner,"Bạn không có quyền");
-        _;
-    }
-    
-    modifier checkValue(uint _number) {
-        require(msg.value>=1 ether,"Bạn phải đặt >=1 ether");
+        require(msg.sender==owner,"Ban khong co quyen");
         _;
     }
     

@@ -35,30 +35,34 @@ app.post('/api/register',(req,res)=>{
   else if (req.body.numberEther<=0)
     res.send({"status":"error","mess":"Kiem tra lai numberEther"});
   else
-    web3.eth.getTransactionCount(req.body.address).then(nonce=>{
-
-      method = BettingContract.methods.register(req.body.number).encodeABI();
-      var rawTransaction= {
-        nonce: web3.utils.toHex(nonce),
-        to: Betting.addressContract,
-        value:web3.utils.toHex(web3.utils.toWei(req.body.numberEther,'ether')),
-        gasLimit: web3.utils.toHex('973182'),
-        gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
-        data: method
-      }
-      var transaction= new Tx(rawTransaction);
-      transaction.sign(Buffer.from(req.body.privateKey,'hex'));
-      var raw= '0x'+transaction.serialize().toString('hex')
-
-      web3.eth.sendSignedTransaction(raw).then((resp)=>{
-        console.log(resp);
-        res.send({"status":"success"});
-      }).catch(error => {
-        mess=error.message;
-        console.log(mess);
-        res.send({"status":"error","mess":mess});
+    try {
+      web3.eth.getTransactionCount(req.body.address).then(nonce=>{
+        method = BettingContract.methods.register(req.body.number).encodeABI();
+        var rawTransaction= {
+          nonce: web3.utils.toHex(nonce),
+          to: Betting.addressContract,
+          value:web3.utils.toHex(req.body.numberEther*req.body.unit),
+          gasLimit: web3.utils.toHex(973182),
+          gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
+          data: method
+        }
+        
+        var transaction= new Tx(rawTransaction);
+        transaction.sign(Buffer.from(req.body.privateKey,'hex'));
+        var raw= '0x'+transaction.serialize().toString('hex');
+  
+        web3.eth.sendSignedTransaction(raw).then((resp)=>{
+          console.log(resp);
+          res.send({"status":"success"});
+        }).catch(error => {
+          console.log(error);;
+          res.send({"status":"error","mess":error.message});
+        });
       });
-    });
+    } catch (error) {
+      res.send({"status":"error","mess":error.message});
+    }
+    
 })
 
 app.get('/api/history',(req,res)=>{
