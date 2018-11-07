@@ -24,6 +24,7 @@ contract ShinoToken {
         totalSupply = 3 * 10 ** uint256(decimals); // update total supply with decimal amount
         name = "Shino token"; 
         symbol = "SHINO";
+        balanceOf[msg.sender] = totalSupply;
     }
 
     function _transfer(address _from, address _to, uint256 _value) internal {
@@ -87,7 +88,6 @@ contract ShinoToken {
         emit Burn(_from, _value);
         return true;
     }
-
 
 }
 

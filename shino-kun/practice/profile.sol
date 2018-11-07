@@ -23,12 +23,12 @@ contract Profiles {
         listUsers.push(_address);
     }
 
-    function getProfile(address _address) view public returns (string, string, string, uint, string){
+    function getProfile(address _address) public view  returns (string, string, string, uint, string){
         var user = users[_address];
         return (user.username, user.firstname, user.lastname, user.age, user.gender);
     }
 
-    function getProfiles() view public returns (address[]){
+    function getProfiles() public view  returns (address[]){
         return listUsers;
     }
 
