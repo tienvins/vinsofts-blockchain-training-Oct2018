@@ -1,0 +1,1237 @@
+{
+  "contractName": "Conditions",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a723058205891d6cb495d1de3813c06ff73f87a2811bf3107a55a04ec4aaff013fc99c6a30029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a723058205891d6cb495d1de3813c06ff73f87a2811bf3107a55a04ec4aaff013fc99c6a30029",
+  "sourceMap": "26:529:2:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;26:529:2;;;;;;;",
+  "deployedSourceMap": "26:529:2:-;;;;;",
+  "source": "pragma solidity ^0.4.23;\n\ncontract Conditions {\n    string bankName;\n    uint money;\n    address owner;\n    uint defaultMoney;\n\n    struct Bank {\n        string customer;\n        uint money;\n        address id;\n    }\n    struct TransactionsDict {\n        address from;\n        address to;\n        uint value;\n        uint time;\n    }\n    mapping (uint => TransactionsDict) transactions;\n    mapping (address => Bank) banks;\n    address[] listCustomers;\n\n    // check owner\n    modifier onlyOwner(){\n        require(owner == msg.sender);\n        _;\n    }\n}",
+  "sourcePath": "/home/thachnguyen/apps/blockchain/vinsofts-blockchain-training-Oct2018/shino-kun/practice/ex6-truffle/bank/contracts/conditions.sol",
+  "ast": {
+    "absolutePath": "/home/thachnguyen/apps/blockchain/vinsofts-blockchain-training-Oct2018/shino-kun/practice/ex6-truffle/bank/contracts/conditions.sol",
+    "exportedSymbols": {
+      "Conditions": [
+        285
+      ]
+    },
+    "id": 286,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 238,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".23"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 285,
+        "linearizedBaseContracts": [
+          285
+        ],
+        "name": "Conditions",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 240,
+            "name": "bankName",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "52:15:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 239,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "52:6:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 242,
+            "name": "money",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "73:10:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 241,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "73:4:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 244,
+            "name": "owner",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "89:13:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 243,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "89:7:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 246,
+            "name": "defaultMoney",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "108:17:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 245,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "108:4:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "canonicalName": "Conditions.Bank",
+            "id": 253,
+            "members": [
+              {
+                "constant": false,
+                "id": 248,
+                "name": "customer",
+                "nodeType": "VariableDeclaration",
+                "scope": 253,
+                "src": "154:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 247,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "154:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 250,
+                "name": "money",
+                "nodeType": "VariableDeclaration",
+                "scope": 253,
+                "src": "179:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 249,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "179:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 252,
+                "name": "id",
+                "nodeType": "VariableDeclaration",
+                "scope": 253,
+                "src": "199:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 251,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "199:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Bank",
+            "nodeType": "StructDefinition",
+            "scope": 285,
+            "src": "132:84:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "Conditions.TransactionsDict",
+            "id": 262,
+            "members": [
+              {
+                "constant": false,
+                "id": 255,
+                "name": "from",
+                "nodeType": "VariableDeclaration",
+                "scope": 262,
+                "src": "255:12:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 254,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "255:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 257,
+                "name": "to",
+                "nodeType": "VariableDeclaration",
+                "scope": 262,
+                "src": "277:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 256,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "277:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 259,
+                "name": "value",
+                "nodeType": "VariableDeclaration",
+                "scope": 262,
+                "src": "297:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 258,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "297:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 261,
+                "name": "time",
+                "nodeType": "VariableDeclaration",
+                "scope": 262,
+                "src": "317:9:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 260,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "317:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "TransactionsDict",
+            "nodeType": "StructDefinition",
+            "scope": 285,
+            "src": "221:112:2",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 266,
+            "name": "transactions",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "338:47:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_TransactionsDict_$262_storage_$",
+              "typeString": "mapping(uint256 => struct Conditions.TransactionsDict)"
+            },
+            "typeName": {
+              "id": 265,
+              "keyType": {
+                "id": 263,
+                "name": "uint",
+                "nodeType": "ElementaryTypeName",
+                "src": "347:4:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "338:34:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_TransactionsDict_$262_storage_$",
+                "typeString": "mapping(uint256 => struct Conditions.TransactionsDict)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 264,
+                "name": "TransactionsDict",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 262,
+                "src": "355:16:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_TransactionsDict_$262_storage_ptr",
+                  "typeString": "struct Conditions.TransactionsDict"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 270,
+            "name": "banks",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "391:31:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Bank_$253_storage_$",
+              "typeString": "mapping(address => struct Conditions.Bank)"
+            },
+            "typeName": {
+              "id": 269,
+              "keyType": {
+                "id": 267,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "400:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "391:25:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Bank_$253_storage_$",
+                "typeString": "mapping(address => struct Conditions.Bank)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 268,
+                "name": "Bank",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 253,
+                "src": "411:4:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Bank_$253_storage_ptr",
+                  "typeString": "struct Conditions.Bank"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 273,
+            "name": "listCustomers",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "428:23:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_address_$dyn_storage",
+              "typeString": "address[]"
+            },
+            "typeName": {
+              "baseType": {
+                "id": 271,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "428:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "id": 272,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "428:9:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                "typeString": "address[]"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 283,
+              "nodeType": "Block",
+              "src": "497:56:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 279,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 276,
+                          "name": "owner",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 244,
+                          "src": "515:5:2",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 277,
+                            "name": "msg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 505,
+                            "src": "524:3:2",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_message",
+                              "typeString": "msg"
+                            }
+                          },
+                          "id": 278,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "sender",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": null,
+                          "src": "524:10:2",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "515:19:2",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 275,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        508,
+                        509
+                      ],
+                      "referencedDeclaration": 508,
+                      "src": "507:7:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 280,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "507:28:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 281,
+                  "nodeType": "ExpressionStatement",
+                  "src": "507:28:2"
+                },
+                {
+                  "id": 282,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "545:1:2"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 284,
+            "name": "onlyOwner",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 274,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "495:2:2"
+            },
+            "src": "477:76:2",
+            "visibility": "internal"
+          }
+        ],
+        "scope": 286,
+        "src": "26:529:2"
+      }
+    ],
+    "src": "0:555:2"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/thachnguyen/apps/blockchain/vinsofts-blockchain-training-Oct2018/shino-kun/practice/ex6-truffle/bank/contracts/conditions.sol",
+    "exportedSymbols": {
+      "Conditions": [
+        285
+      ]
+    },
+    "id": 286,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 238,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".23"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 285,
+        "linearizedBaseContracts": [
+          285
+        ],
+        "name": "Conditions",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "id": 240,
+            "name": "bankName",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "52:15:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_string_storage",
+              "typeString": "string"
+            },
+            "typeName": {
+              "id": 239,
+              "name": "string",
+              "nodeType": "ElementaryTypeName",
+              "src": "52:6:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_string_storage_ptr",
+                "typeString": "string"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 242,
+            "name": "money",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "73:10:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 241,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "73:4:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 244,
+            "name": "owner",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "89:13:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 243,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "89:7:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 246,
+            "name": "defaultMoney",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "108:17:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 245,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "108:4:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "canonicalName": "Conditions.Bank",
+            "id": 253,
+            "members": [
+              {
+                "constant": false,
+                "id": 248,
+                "name": "customer",
+                "nodeType": "VariableDeclaration",
+                "scope": 253,
+                "src": "154:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 247,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "154:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 250,
+                "name": "money",
+                "nodeType": "VariableDeclaration",
+                "scope": 253,
+                "src": "179:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 249,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "179:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 252,
+                "name": "id",
+                "nodeType": "VariableDeclaration",
+                "scope": 253,
+                "src": "199:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 251,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "199:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Bank",
+            "nodeType": "StructDefinition",
+            "scope": 285,
+            "src": "132:84:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "Conditions.TransactionsDict",
+            "id": 262,
+            "members": [
+              {
+                "constant": false,
+                "id": 255,
+                "name": "from",
+                "nodeType": "VariableDeclaration",
+                "scope": 262,
+                "src": "255:12:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 254,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "255:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 257,
+                "name": "to",
+                "nodeType": "VariableDeclaration",
+                "scope": 262,
+                "src": "277:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 256,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "277:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 259,
+                "name": "value",
+                "nodeType": "VariableDeclaration",
+                "scope": 262,
+                "src": "297:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 258,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "297:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 261,
+                "name": "time",
+                "nodeType": "VariableDeclaration",
+                "scope": 262,
+                "src": "317:9:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 260,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "317:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "TransactionsDict",
+            "nodeType": "StructDefinition",
+            "scope": 285,
+            "src": "221:112:2",
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 266,
+            "name": "transactions",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "338:47:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_TransactionsDict_$262_storage_$",
+              "typeString": "mapping(uint256 => struct Conditions.TransactionsDict)"
+            },
+            "typeName": {
+              "id": 265,
+              "keyType": {
+                "id": 263,
+                "name": "uint",
+                "nodeType": "ElementaryTypeName",
+                "src": "347:4:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "338:34:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_uint256_$_t_struct$_TransactionsDict_$262_storage_$",
+                "typeString": "mapping(uint256 => struct Conditions.TransactionsDict)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 264,
+                "name": "TransactionsDict",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 262,
+                "src": "355:16:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_TransactionsDict_$262_storage_ptr",
+                  "typeString": "struct Conditions.TransactionsDict"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 270,
+            "name": "banks",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "391:31:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Bank_$253_storage_$",
+              "typeString": "mapping(address => struct Conditions.Bank)"
+            },
+            "typeName": {
+              "id": 269,
+              "keyType": {
+                "id": 267,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "400:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "391:25:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Bank_$253_storage_$",
+                "typeString": "mapping(address => struct Conditions.Bank)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 268,
+                "name": "Bank",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 253,
+                "src": "411:4:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Bank_$253_storage_ptr",
+                  "typeString": "struct Conditions.Bank"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 273,
+            "name": "listCustomers",
+            "nodeType": "VariableDeclaration",
+            "scope": 285,
+            "src": "428:23:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_address_$dyn_storage",
+              "typeString": "address[]"
+            },
+            "typeName": {
+              "baseType": {
+                "id": 271,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "428:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "id": 272,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "428:9:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                "typeString": "address[]"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 283,
+              "nodeType": "Block",
+              "src": "497:56:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 279,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "id": 276,
+                          "name": "owner",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 244,
+                          "src": "515:5:2",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 277,
+                            "name": "msg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 505,
+                            "src": "524:3:2",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_message",
+                              "typeString": "msg"
+                            }
+                          },
+                          "id": 278,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "sender",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": null,
+                          "src": "524:10:2",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "515:19:2",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 275,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        508,
+                        509
+                      ],
+                      "referencedDeclaration": 508,
+                      "src": "507:7:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 280,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "507:28:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 281,
+                  "nodeType": "ExpressionStatement",
+                  "src": "507:28:2"
+                },
+                {
+                  "id": 282,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "545:1:2"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 284,
+            "name": "onlyOwner",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 274,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "495:2:2"
+            },
+            "src": "477:76:2",
+            "visibility": "internal"
+          }
+        ],
+        "scope": 286,
+        "src": "26:529:2"
+      }
+    ],
+    "src": "0:555:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-11-07T07:07:23.046Z"
+}
