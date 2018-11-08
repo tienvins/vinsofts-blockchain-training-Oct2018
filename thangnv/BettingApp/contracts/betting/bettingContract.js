@@ -28,7 +28,6 @@ module.exports = {
         {
             try {
                 var wallet =  web3.eth.accounts.privateKeyToAccount('0x'+privateKey);
-                console.log(wallet);
                 nonce= await web3.eth.getTransactionCount(wallet.address);
                 method = bettingContract.methods.register(number).encodeABI();
                 var rawTransaction= {

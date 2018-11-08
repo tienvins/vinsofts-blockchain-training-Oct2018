@@ -1,6 +1,6 @@
-const httpProvider="http://localhost:7545";
-
-const addressContract='0xb64768440acfa50521304503734e19bf41c57209';
+const httpProvider="https://ropsten.infura.io/v3/2ea352f51b5a45819be9923cdfb58894";
+// https://ropsten.infura.io/v3/2ea352f51b5a45819be9923cdfb58894		http://localhost:7545
+const addressContract='0xD2e5aa7Ff5A7CC35B1f4Ed8Cf57D99E022D3B455';
 
 const abiContract =[
 	{

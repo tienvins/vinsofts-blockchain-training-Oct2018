@@ -5,7 +5,7 @@ var betting= require('../contracts/betting/bettingContract');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('betting/index', { title: 'Express' });
+  res.render('betting/index', { title: 'BettingApp'});
 });
 
 router.post('/api/register', (req, res, next)=>{
@@ -17,8 +17,8 @@ router.post('/api/register', (req, res, next)=>{
 router.get('/api/history',(req,res, next)=>{
   betting.getHistory().then(data=> res.send(data));
 })
-  
-router.get('/api/infobetting',(req,res, next)=>{   
+
+router.get('/api/infobetting',(req,res, next)=>{
   betting.getInfoBetting().then(data=> res.send(data));
 })
 
