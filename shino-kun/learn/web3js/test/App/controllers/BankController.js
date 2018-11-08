@@ -36,5 +36,9 @@ module.exports = {
         
     },
 
+    listCustomers: (req, res) => {
+        Bank.methods.getListCustomer().call().then(list => res.json({status: 200, listCustomers: list}));
+    }
+
     
 } 

@@ -1,5 +1,5 @@
-pragma solidity ^0.4.25;
-import "./bank.sol";
+pragma solidity ^0.4.23;
+import "./banks.sol";
 
 contract Transactions is Banks { 
 	// + Lưu lịch sử giao dịch vào con tract gồm các thông tin + from  
@@ -13,26 +13,24 @@ contract Transactions is Banks {
 	// 		 +id
 	// 		 +số dư (default = 0)
 	// + lưu thông tin người dùng vào contract 
-    function openBank(address _address, string _customer) public returns(string, address, string, uint){
-        var bank = banks[_address];
-        bank.customer = _customer;
-        bank.money = defaultMoney;
-        bank.id = _address;
-        listCustomers.push(_address);
-        return ("Bạn đã mở tài khoản thành công. ", bank.id, bank.customer, bank.money);
+    function openBank(address _address, string _customer) public returns(uint) {
+        uint id = listCustomers.push(_address) - 1;
+        banks[_address]= Bank(_customer, defaultMoney, id);
+        return id;
+        
     }
 
     // + Tạo 1 chức năng lấy ra thông tin tài khoản, chỉ lấy ra thông tin tài khoản của chính nó
-    function myBank (address _address) public returns (string, string, uint, address){
-        var bank = banks[_address];
-        return ("Số dư tài khoản của bạn là: ", bank.customer, bank.money, bank.id);
+    function myBank (address _address) public view returns (string, uint, uint){
+        Bank memory bank = banks[_address];
+        return (bank.customer, bank.money, bank.id);
     }
 
     // + implement chức năng gửi tiền cho 1 tài khoản khác,  ( tạo event khi gửi thành công)
     // + implement rút tiền Tổng số tiền của ngân hàng sẽ bị trừ theo (tạo event khi rút tiền thành công )
     function sendMoney(address from, address to, uint money) public returns (string){
-        var fromBank = banks[from];
-        var toBank = banks[to];
+        Bank storage fromBank = banks[from];
+        Bank storage toBank = banks[to];
         // toBank.money += money; not working
         uint fromAmount = fromBank.money - money;
         uint toAmount = toBank.money + money;
@@ -41,23 +39,24 @@ contract Transactions is Banks {
         }else {
             fromBank.money = fromAmount;
             toBank.money = toAmount;
-            transactionHistory(from, to);
+            transactionHistory(from, to, money);
             return "Gửi tiền thành công.";
         }
         
     }
+    //0x655a51174c21888b13768b0927a35ba5a75201da
 
     
-    function transactionHistory(address from, address to) public {
-        var transaction = transactions[now];
+    function transactionHistory(address from, address to, uint _value) public {
+        TransactionsDict storage transaction = transactions[now];
         transaction.from = from;
         transaction.to = to;
-        transaction.value = msg.value;
+        transaction.value = _value;
         transaction.time = now;
     }
 
     // + lấy ra danh sách khách hàng, chỉ owner mới được lấy ra
-    function getListCustomer() onlyOwner returns (address[]){
+    function getListCustomer() public view returns (address[]){
         return listCustomers;
     }
 }

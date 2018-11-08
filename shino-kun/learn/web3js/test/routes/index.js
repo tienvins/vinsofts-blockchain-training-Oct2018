@@ -5,6 +5,7 @@ const Bank   = require('../App/controllers/BankController');
 router.get('/', Home.index)
       .get('/set-name', Home.setNamePage)
       .get('/bank', Bank.bankPage)
+      .get('/list-customers', Bank.listCustomers)
       .post('/set-name', Home.setName)
       .post('/open-bank', Bank.openBank)
 

@@ -45,6 +45,11 @@
                 }
             })
         })
+
+        $.get("/list-customers", function(res){
+            console.log('res: ', res);
+            showListCustomers(res.listCustomers);
+        })
     </script>
   </body>
 </html>
