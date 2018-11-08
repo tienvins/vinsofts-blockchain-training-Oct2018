@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>BettingApp</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>Betting App</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <form id="formRegister">
+                <div>
+                    <label for="inputAddress">Private Key</label>
+                    <input type="password" class="form-control" id="privateKey" name="privateKey" placeholder="" required>
+                </div>
+                <div>
+                    <label for="number">Number</label>
+                    <select id="number" name="number" class="form-control" required>
+                        <option value=""></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="inputnumberEther">Ether</label>
+                    <input type="number" class="form-control" id="numberEther" name="numberEther" placeholder="" required>
+                </div>
+                
+                </form>
+                <br/>
+                <div>
+                    <button id="register" class="btn btn-primary btn-custom" onclick="postRegister()">Betting</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Đã có <span style="color:red" id="numberPeopleBet"></span> người chơi đủ <span id="totalPeople"></span> người sẽ quay thưởng <br/>
+                <hr>
+                Tổng tiền cược hiện tại : <span style="color:red" id="totalAmount"></span> <br/>
+                <hr>
+                Giải đặc biệt: <span style="color:red" id="numberlast"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <br/>
+        <!-- info people betting -->
+        <h1>Player Information</h1>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Address</th>
+                <th scope="col">Number</th>
+                <th scope="col">Money</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyPlayer">
+              
+            </tbody>
+          </table>
+        <!-- history -->
+        <h1>History</h1>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Address</th>
+                <th scope="col">Money</th>
+                <th scope="col">Number</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyHistory">
+              
+            </tbody>
+          </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+      crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"></script>
+
+      <script>
+        function postRegister() {
+        location.reload();
+        $.post('http://localhost:6969/api/betting', $('#formRegister').serialize(), function (data) {
+            console.log(data);
+        })
+        }
+        
+        function getHistory() {
+            $.get('http://localhost:6969/api/infoHistory', {}, function (data) {
+                data.reverse(function (a) {
+                return a
+                });
+                tbody = '';
+                for (let i = 0; i < data.length; i++) {
+                tbody += '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] +
+                    '</td><td>' + data[i][3] + '</td></tr>';
+                }
+                $('#tbodyHistory').html(tbody);
+            })
+        }
+        getHistory();
+
+        function getInfoPlayer() {
+            $.get('http://localhost:6969/api/infoPeople', {}, function (data) {
+                data.reverse(function (a) {
+                return a
+                });
+                tbody = '';
+                for (let i = 0; i < data.length; i++) {
+                tbody += '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] +
+                    '</td></tr>';
+                }
+                $('#tbodyPlayer').html(tbody);
+            })
+        }
+        getInfoPlayer();
+
+        function getInfoWinner(){
+            $.get('http://localhost:6969/api/infoWinner', (data)=>{
+                
+                $('#numberlast').text(data);
+            })
+        }
+        getInfoWinner();
+
+        function getTotalPeople(){
+            $.get('http://localhost:6969/api/infoTotalPeople', (data) => {
+                $('#totalPeople').text(data);
+            })
+        }
+        getTotalPeople();
+
+        function getInfoNumberBet(){
+            $.get('http://localhost:6969/api/infoNumberBet', (data)=>{
+                $('#numberPeopleBet').text(data);
+            })
+        }
+        getInfoNumberBet();
+        
+        function getTotalAmount(){
+            $.get('http://localhost:6969/api/infoTotalAmount', (data)=>{
+                $('#totalAmount').text(data);
+            })
+        }
+        getTotalAmount();
+        
+    </script>
+
+
+
+</body>
+
+</html>
