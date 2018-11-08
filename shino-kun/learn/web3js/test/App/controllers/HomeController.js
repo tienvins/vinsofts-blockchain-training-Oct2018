@@ -68,11 +68,18 @@ module.exports = {
         // }, (err, events) => console.log(events))
         // console.log(contract.methods);
         // console.log(contract.options.address);
-        res.render('index', { title: 'Web3-JS' });
+        res.render('index', { title: 'Hello Web3-JS' });
     },
+
+    setNamePage: (req, res) => {
+        res.render('setname', { title: 'Demo set name' });
+    },
+
     setName: (req, res) => {
         
         contract.methods.setName(req.body.name).send({from:'0xd529304096b18956fe44feff567e7d9204cfcb6b'});
         contract.methods.getName().call().then(newName => res.json({name: newName}));  
-    }
+    },
+
+    
 } 
