@@ -7,7 +7,7 @@
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
     crossorigin="anonymous">
-  <link rel="shortcut icon" type="image/png" href="/images/iconethereum.png"/>
+  <link rel="shortcut icon" type="image/png" href="/images/iconethereum.png" />
   <style>
 
     .row{
@@ -105,7 +105,7 @@
             <h2>Register</h2>
           </div>
           <div class="card-body">
-            <form id="formRegister" >
+            <form id="formRegister">
               <div>
                 <label for="inputAddress2">Private Key</label>
                 <input type="password" class="form-control" id="privateKey" name="privateKey" placeholder="">
@@ -129,7 +129,7 @@
                     <option value="1000000000000000">finney</option>
                     <option selected value="1000000000000000000">eth</option>
                   </select>
-                  </div>
+                </div>
               </div>
             </form>
             <div>
@@ -206,7 +206,7 @@
         });
         tbody = '';
         for (let index = 0; index < data.length; index++) {
-          tbody += '<tr><td>' + data[index][0] + '</td><td>' + data[index][1] + '</td><td>' + data[index][2] +'</td><td>' + data[index][3]/1000000000000000000 + '</td></tr>';
+          tbody += '<tr><td>' + data[index][0] + '</td><td>' + data[index][1] + '</td><td>' + data[index][2] + '</td><td>' + data[index][3] / 1000000000000000000 + '</td></tr>';
         }
         $('#tbodyHistory').html(tbody);
       })
@@ -217,7 +217,7 @@
         tbody = '';
 
         for (let index = 0; index < data[1].length; index++) {
-          tbody += '<tr><td>' + data[1][index][0] + '</td><td>' + data[1][index][1] + '</td><td>' + data[1][index][2]/1000000000000000000 + '</td></tr>';
+          tbody += '<tr><td>' + data[1][index][0] + '</td><td>' + data[1][index][1] + '</td><td>' + data[1][index][2] / 1000000000000000000 + '</td></tr>';
         }
         $('#tbodyInfoBetting').html(tbody);
 
@@ -238,14 +238,13 @@
       $.post('http://localhost:3000/betting/api/register', $('#formRegister').serialize(), function (data) {
         showPage();
         console.log(data);
-        if(data.status=='success'){
+        if (data.status == 'success') {
           getInfoBetting();
           getHistory();
           alert('Mess: Registered');
         }
-        else
-        {
-          alert('Mess: '+data.mess);
+        else {
+          alert('Mess: ' + data.mess);
         }
       })
     }
