@@ -1,7 +1,32 @@
-pragma solidity ^0.4.25;
-import "./conditions.sol";
-contract Banks is Conditions{
-    
+pragma solidity ^0.4.23;
+
+contract Banks {
+    string public bankName;
+    uint public money;
+    address public owner;
+    uint public defaultMoney;
+
+    struct Bank {
+        string customer;
+        uint money;
+        uint id;
+    }
+    struct TransactionsDict {
+        address from;
+        address to;
+        uint value;
+        uint time;
+    }
+    mapping (uint => TransactionsDict) transactions;
+    mapping (address => Bank) banks;
+    address[] listCustomers;
+
+    // check owner
+    modifier onlyOwner(){
+        require(owner == msg.sender);
+        _;
+    }
+
     // - Tạo contructor Bank , 
 	// + khởi tạo gồm 3 tham số trên, mặc định số tiền của ngân hàng = 1000
     constructor (){
@@ -15,13 +40,12 @@ contract Banks is Conditions{
     event WithDraw (address id, uint money, uint time);
 
     // + tao 1 function đổi tên ngân hàng , trong đó chỉ chủ sở hữu ngân hàng mới có thể thay đổi
-    function renameBank(string _bankName) onlyOwner returns (string) {
+    function renameBank(string _bankName) onlyOwner public  {
         bankName = _bankName;
-        return bankName;
     }
 
     // + Lấy ra thông tin của ngân hàng, ai cũng có thể xem thông tin 
-    function bankInformation() view public returns(string, address){
+    function bankInformation() public returns(string, address){
         return (bankName, owner);
     }
 
@@ -30,7 +54,7 @@ contract Banks is Conditions{
 	// + Rút Tiền
 
     function deposit(address _address, uint _money) public returns (string, uint){
-        var bank = banks[_address];
+        Bank storage bank = banks[_address];
         uint amount = bank.money + _money;
         bank.money = amount;
         emit Deposit (_address, _money, now);
@@ -50,7 +74,7 @@ contract Banks is Conditions{
     //     bank.money -= _money;
     // }
     function withDraw(address _address, uint _money)  public returns(string, uint) {
-        var bank = banks[_address];
+        Bank storage bank = banks[_address];
         uint amount = bank.money - _money;
         emit WithDraw (_address, _money, now);
 

@@ -16,34 +16,55 @@ const Tx = Betting.Tx;
 const contractAddress = Betting.contractAddress;
 
 app.get('/',(req,res) => {
-    var data = fs.readFileSync('./index.html');
+    var data = fs.readFileSync(__dirname + '/../index.html');
     res.end(data);
 });
 
-app.post('/api/betting',(req,res)=>{
-    // res.send(req.body);
-    console.log(1);
-    web3.eth.getTransactionCount(req.body.address).then(nonce=>{
+// app.post('/api/betting',(req,res)=>{
+//     // res.send(req.body);
+//     // console.log(1);
+//     web3.eth.getTransactionCount(req.body.address).then(nonce=>{
 
-      method = contract.methods.bet(req.body.number).encodeABI();
+//       method = contract.methods.bet(req.body.number).encodeABI();
 
-      var rawTransaction= {
-        nonce: web3.utils.toHex(nonce),
-        to: contractAddress,
-        value:web3.utils.toHex(web3.utils.toWei('1','ether')),
-        gasLimit: web3.utils.toHex('973182'),
-        gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
-        data: method
-      }
+//       var rawTransaction= {
+//         nonce: web3.utils.toHex(nonce),
+//         to: contractAddress,
+//         value:web3.utils.toHex(web3.utils.toWei('1','ether')),
+//         gasLimit: web3.utils.toHex('973182'),
+//         gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
+//         data: method
+//       }
     
-      var transaction= new Tx(rawTransaction);
-      transaction.sign(Buffer.from(req.body.privateKey,'hex'));
+//       var transaction= new Tx(rawTransaction);
+//       transaction.sign(Buffer.from(req.body.privateKey,'hex'));
     
-      var serializedTx = transaction.serialize();
-      var raw= '0x'+transaction.serialize().toString('hex')
+//       var serializedTx = transaction.serialize();
+//       var raw= '0x'+transaction.serialize().toString('hex')
     
-      web3.eth.sendSignedTransaction(raw).then(console.log);
+//       web3.eth.sendSignedTransaction(raw).then(console.log);
       
+//     });
+// });
+
+app.post('/api/betting',(req,res)=>{
+
+    var wallet = web3.eth.accounts.privateKeyToAccount('0x'+req.body.privateKey);
+    web3.eth.getTransactionCount(wallet.address).then(nonce=>{
+        method = contract.methods.bet(req.body.number).encodeABI();
+        var rawTransaction = {
+            nonce: web3.utils.toHex(nonce),
+            to: contractAddress,
+            value: web3.utils.toHex(web3.utils.toWei(req.body.numberEther,'ether')),
+            gasLimit: web3.utils.toHex(973182),
+            gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
+            data: method
+        }
+
+        var transaction = new Tx(rawTransaction);
+        transaction.sign(Buffer.from(req.body.privateKey,'hex'));
+        var raw= '0x'+transaction.serialize().toString('hex');
+        web3.eth.sendSignedTransaction(raw).then(console.log);
     });
 });
 
@@ -70,8 +91,8 @@ app.get('/api/infoHistory',(req,res)=>{
     });
 });
 
-app.get('/api/infoHistory',(req,res)=>{
-    contract.methods.getHistory().call().then(users => {
+app.get('/api/infoPlayer',(req,res)=>{
+    contract.methods.getInfoBetting().call().then(users => {
         console.log(Array(users)[0]);
         res.send(Array(users)[0]);
     });

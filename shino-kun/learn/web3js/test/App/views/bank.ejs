@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    
+    <div id="bank">
+        <h3>Ngân hàng của tôi</h3>
+        <p class="bank-name">The Bank name: <strong><%= bankName %></strong></p> 
+        <p class="bank-money">The default money: <strong><%= defaultMoney %></strong></p> 
+    </div>
+    
+    <div id="open">
+        <h3>Mở tài khoản</h3>
+        <input type="text" name="" id="customer-address" placeholder="address">
+        <input type="text" name="" id="customer-name" placeholder="name">
+        <button id="open-bank">Open</button>
+    </div>
+
+    <div id="list">
+        <h3>Danh sách tài khoản đã mở</h3>
+        <ul class="list">
+
+        </ul>
+        
+    </div>
+    <br>
+    <a href="/">Home</a>
+    <script>
+        function showListCustomers(list){
+            $('.list').empty();
+            $.each(list, function(i, v){
+                $('.list').append("<li>"+v+"</li>")
+            })
+        }
+        $("#open-bank").click(function(){
+            $.post("/open-bank", {address: $("#customer-address").val(), name: $("#customer-name").val()}, function(res){
+                console.log(res);
+                if(res.status ==200){
+                    showListCustomers(res.listCustomers);
+                }
+            })
+        })
+
+        $.get("/list-customers", function(res){
+            console.log('res: ', res);
+            showListCustomers(res.listCustomers);
+        })
+    </script>
+  </body>
+</html>

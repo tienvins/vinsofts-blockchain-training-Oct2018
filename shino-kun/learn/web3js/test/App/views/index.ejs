@@ -7,15 +7,10 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-
-    <input id="input"  type="text" />
-    <button id="btn" >Set</button>
-
-    <div >
-      My name: <span id="output"></span>
-    </div>
-
+    <ul>
+      <li><a href="/set-name">Demo set name</a></li>
+      <li><a href="/bank">Demo my bank</a></li>
+    </ul>
     <script>
       $('#btn').click(function(){
         console.log($("#input").val());
