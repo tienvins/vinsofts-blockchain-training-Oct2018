@@ -1,7 +1,33 @@
 const contract = require('../../blockchain/tung');
 const mycontract = contract.contract;
-
+const fs = require('fs');
+const Config = require('../../config/app');
 module.exports = {
+    deploy: async (req, res) => {
+        if(req.method=="GET"){
+            res.render('home/deploy');
+        }else{
+            try {
+                var dl = await contract.deploy(req.body.privatekey);
+                res.send(dl)
+                fs.writeFile(Config.config()+"contractAdress.json", dl.contractAddress, function(err) {
+                    if(err) {
+                        return console.log(err);
+                    }
+                    console.log("The file was saved!");
+                }); 
+            } catch (error) {
+                console.log(error)
+            }
+            res.redirect('/');
+        }
+    },
+    // deploy2: async (req, res) => { 
+    //     // get: req.params.paramName /:paramName
+    //      // get: req.param('paramName') /:paramName
+    //       // get: req.query.paramName /:paramName
+    //     res.send(req.params.pr)
+    // },
     index: async (req, res) => {
         var songchoi = await mycontract.methods.getLenthCustomers().call();
         var songsetraothuong = await mycontract.methods.soNguoiSeQuayThuong().call();
