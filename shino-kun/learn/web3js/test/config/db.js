@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 module.exports = function(){
-	var dbName = "test";
+	var dbName = "banks";
 	mongoose.Promise = global.Promise;
 	mongoose.connect('mongodb://localhost/' + dbName);
 	mongoose.connection
