@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 contract CaCuocs{
     
     uint public amount = 0 ether;
-    uint public soNguoiSeQuayThuong = 2;
+    uint public soNguoiSeQuayThuong = 3;
     uint public sovongdatraothuong = 0;
     struct Customer{
         uint price;
@@ -65,7 +65,7 @@ contract CaCuocs{
     }
     
     function TraoThuong() private {
-        uint rand = randMod(10);
+        uint rand = 1;
         sovongdatraothuong++;
         address[] adr = numberToOwner[rand];
         if(adr.length>0){
@@ -74,6 +74,7 @@ contract CaCuocs{
                 for (uint8 i2 = 0; i2< ownertonumbers.length; i2++){
                     if(adr[i]==ownertonumbers[i2].owner){
                         numberToOwnerLS[sovongdatraothuong].push(ownertonumbers[i2]);
+                        adr[i].transfer(tienthuong);
                     }
                 }
             }
@@ -88,6 +89,9 @@ contract CaCuocs{
             ownertonumbers = ownertonumbers2;
         }
         
+    }
+    function () payable{
+        revert();
     }
     
     
