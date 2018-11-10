@@ -1,2 +1,0 @@
--> copy file cacuoc.sol lên remix. Lấy address của contract paste vào contractAddress của file servers/bet.js
--> paste private key và sử dụng. sử dụng mạng testnet nên sẽ phải chờ tầm 1' rồi f5 lại

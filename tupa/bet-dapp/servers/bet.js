@@ -1,6 +1,6 @@
 const Tx = require('ethereumjs-tx');
 const Web3 = require('web3');
-const web3 = new Web3('https://ropsten.infura.io/v3/ba5b63eff29c4e21855aefb8b50e9846');
+const web3 = new Web3('http://127.0.0.1:7545');
 const abi = 
 
 [
@@ -212,7 +212,7 @@ const abi =
 	}
 ]
 
-const contractAddress = '0x2b49a4dbf9a690402dc0b9f95812c9fbfd8538f9'
+const contractAddress = '0x5e3c944c407f92f620e3a66fb780f86062c0ac87'
 const contract = new web3.eth.Contract(abi, contractAddress)
 
 module.exports = {

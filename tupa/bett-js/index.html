@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>BettingApp</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="web3.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Betting App</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <form id="formRegister">
+                    <!-- <div>
+                        <label for="inputAddress">Private Key</label>
+                        <input type="password" class="form-control" id="privateKey" name="privateKey" placeholder=""
+                            required>
+                    </div> -->
+                    <div>
+                        <label for="number">Number</label>
+                        <select id="number" name="number" class="form-control" required>
+                            <option value=""></option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="inputnumberEther">Ether</label>
+                        <input type="number" class="form-control" id="numberEther" name="numberEther" placeholder=""
+                            required>
+                    </div>
+
+                </form>
+                <br />
+                <div>
+                    <button id="register" class="btn btn-primary btn-custom" onclick="betting($('#number').val(),$('#numberEther').val())">Betting</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                Đã có <span style="color:red" id="numberPeopleBet"></span> người chơi đủ <span id="totalPeople"></span>
+                người sẽ quay thưởng <br />
+                <hr>
+                Tổng tiền cược hiện tại : <span style="color:red" id="totalAmount"></span> <br />
+                <hr>
+                Giải đặc biệt: <span style="color:red" id="numberlast"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <br />
+        <!-- info people betting -->
+        <h1>Player Information</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Address</th>
+                    <th scope="col">Number</th>
+                    <th scope="col">Money</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyPlayer">
+
+            </tbody>
+        </table>
+        <!-- history -->
+        <h1>History</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Time</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Money</th>
+                    <th scope="col">Number</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyHistory">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <script>
+        window.addEventListener('load', function () {
+            // // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+            // if (typeof web3 !== 'undefined') {
+            //     // Use Mist/MetaMask's provider
+            web3js = new Web3(web3.currentProvider);
+            // } else {
+            //     // Handle the case where the user doesn't have web3. Probably 
+            //     // show them a message telling them to install Metamask in 
+            //     // order to use our app.
+            //     // For example
+            //     web3js = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+            // }
+            // Now you can start your app & access web3js freely:
+            console.log(web3js)
+            var myABI = [{ "constant": true, "inputs": [], "name": "totalPeople", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "totalAmount", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function" }, { "constant": true, "inputs": [], "name": "random", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getInfoBetting", "outputs": [{ "components": [{ "name": "adsss", "type": "address" }, { "name": "numberrr", "type": "uint256" }, { "name": "moneyyy", "type": "uint256" }], "name": "", "type": "tuple[]" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": false, "inputs": [{ "name": "_number", "type": "uint256" }], "name": "bet", "outputs": [], "payable": true, "stateMutability": "payable", "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "numberPeopleBet", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "getHistory", "outputs": [{ "components": [{ "name": "time", "type": "uint256" }, { "name": "ads", "type": "address" }, { "name": "money", "type": "uint256" }, { "name": "number", "type": "uint256" }], "name": "", "type": "tuple[]" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "winner", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "uint256" }], "name": "players", "outputs": [{ "name": "", "type": "address" }], "payable": false, "stateMutability": "view", "type": "function" }, { "constant": true, "inputs": [], "name": "ethBet", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "stateMutability": "view", "type": "function" }, { "inputs": [], "payable": false, "stateMutability": "nonpayable", "type": "constructor" }];
+            var myContractAddress = '0x70e4b12d723cc07afea3b7619fea9c192f2e0fdf';
+            myContract = new web3js.eth.Contract(myABI, myContractAddress);
+            console.log(myContract);
+
+            startApp();
+            getInfoBetting();
+            getHistory();
+        })
+
+        async function startApp() { 
+            var totalPeople =  myContract.methods.totalPeople().call((err, res) => { $('#totalPeople').text(res) });
+            var totalAmount =  myContract.methods.totalAmount().call((err, res) => { $('#totalAmount').text(res) });
+            var numberPeopleBet =  myContract.methods.numberPeopleBet().call((err, res) => { $('#numberPeopleBet').text(res) });
+            var numberlast =  myContract.methods.winner().call((err, res) => { $('#numberlast').text(res) });
+        }
+
+        async function getInfoBetting() {
+            var data = await myContract.methods.getInfoBetting().call();
+            var tbody = '';
+            for (let i = 0; i < data.length; i++) {
+                tbody += '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td></tr>';
+            }
+            $('#tbodyPlayer').html(tbody);
+        }
+
+        async function getHistory() {
+            var data = await myContract.methods.getHistory().call();
+            var tbody = '';
+            for (let i = 0; i < data.length; i++) {
+                tbody += '<tr><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] + '</td><td>' + data[i][3] + '</td></tr>';
+            }
+            $('#tbodyHistory').html(tbody);
+        }
+
+        async function betting(number, money){
+            
+            var wallet = await web3js.eth.getAccounts();
+            var data = await myContract.methods.bet(number).send({
+                value: web3js.utils.toWei(money,'ether'),
+                from: wallet[0],
+            });
+            location.reload();
+            // document.getElementById("formRegister").reset();
+        }
+    </script>
+
+</body>
+
+</html>

@@ -56,7 +56,7 @@ app.post('/api/betting',(req,res)=>{
             nonce: web3.utils.toHex(nonce),
             to: contractAddress,
             value: web3.utils.toHex(web3.utils.toWei(req.body.numberEther,'ether')),
-            gasLimit: web3.utils.toHex(973182),
+            gasLimit: web3.utils.toHex(210000),
             gasPrice: web3.utils.toHex(web3.utils.toWei('40','gwei')),
             data: method
         }
