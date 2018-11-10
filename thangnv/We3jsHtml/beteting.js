@@ -1,4 +1,3 @@
-// web3 = new Web3('https://ropsten.infura.io/v3/2ea352f51b5a45819be9923cdfb58894');
 web3js = new Web3(web3.currentProvider);
 bettingContract = new web3js.eth.Contract(
     [{
@@ -174,15 +173,18 @@ async function getInfoBetting() {
 async function getHistory() {
     var data = await bettingContract.methods.getHistory().call();
     return data;
-    s
 }
 
 async function register(number, money) {
-    account='';
-    await web3js.eth.getAccounts().then(res=> account=res[0]);
+    account = '';
+    await web3js.eth.getAccounts().then(res => account = res[0]);
     var data = await bettingContract.methods.register(number).send({
         value: money,
         from: account,
+    }).on('transactionHash', () => {
+        $('#mess').text('Transaction của chú sẽ đc Pending. OK ?');
+        $('#exampleModal').modal();
+        showPage();
     });
     return data;
 }
