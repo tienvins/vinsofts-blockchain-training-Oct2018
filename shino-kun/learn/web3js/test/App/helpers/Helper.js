@@ -13,6 +13,10 @@ module.exports = {
         address: '0xbf6db0d28d1ee7a2e66c9b34d9a927a0030b4cc1',
         abi: [{"constant":false,"inputs":[],"name":"getName","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_name","type":"string"}],"name":"setName","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"}]
     },
-
+    demoUser: {
+        address: '0x5a224f0eeda208a72e648cb767006730f206a66d',
+        abi: [{"constant":false,"inputs":[{"name":"_name","type":"string"},{"name":"_age","type":"uint256"}],"name":"insertUser","outputs":[{"name":"success","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_address","type":"address"}],"name":"getUser","outputs":[{"name":"name","type":"string"},{"name":"age","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}]
+    },
+    shino: "49DF49A5CABB26F0C83D7B134CEF62FA86DF8826C89DA7460E6A6F87A83772AD",
     host: "HTTP://127.0.0.1:8545"
 }

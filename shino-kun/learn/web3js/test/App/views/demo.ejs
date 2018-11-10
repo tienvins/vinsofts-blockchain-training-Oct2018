@@ -14,11 +14,55 @@
         <li><%= accounts[i] %></li>
       <% } %>
     </ul>
+    
+    <div>
+      <h3>Demo insertUser</h3>
+      <input type="text" class="address" placeholder="address">
+      <input type="text" class="name" placeholder="name">
+      <input type="text" class="age" placeholder="age">
+      <button class="add">Add</button>
+    </div>
+
+    <div>
+      <h3>send transaction</h3>
+      <input type="text" class="from" placeholder="from private key">
+      <!-- <input type="text" class="to" placeholder="to private key"> -->
+      <!-- <input type="text" class="ether" placeholder="ether"> -->
+      <select name="" class="ether">
+        <option value="1">1</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="50">50</option>
+      </select>
+      <button class="send">Send ether</button>
+    </div>
     <a href="/">Home</a>
     <script>
       $.get("/demo", function(res){
         console.log(res);
-      
+        
+      })
+      $(".add").click(function(){
+        $.post('/insert-user', {
+          address: $(".address").val(), 
+          name: $(".name").val(), 
+          age: $(".age").val()
+        }, function(res) {
+          console.log(res);
+        })
+      })
+
+      $('.send').on("click", function(){
+        console.log(1, $('.ether').val());
+        $.post('/send-transaction', {
+          from: $('.from').val(),
+          // to: $('.to').val(),
+          ether: $('.ether').val()
+        }, function(res) {
+          console.log(res);
+        })
       })
     </script>
   </body>

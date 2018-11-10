@@ -21,7 +21,8 @@ module.exports = {
            
             var status = await Bank.methods.openBank(address, name)
                         .send({ 
-                            from: address,
+                            // from: address,
+                            from: "0x33764f7a75Ac39AD559048bB525f8F29cA4d78df",
                             gas: 3000000
                         })
                         .then(result => result.status)

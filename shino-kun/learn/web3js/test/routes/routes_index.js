@@ -15,5 +15,7 @@ router.get('/', Home.index)
       .post('/open-bank', Bank.openBank)
       .post('/deposit', Bank.deposit)
       .post('/withdraw', Bank.withdraw)
+      .post('/insert-user', Demo.insertUser)
+      .post('/send-transaction', Demo.sendTransaction)
 
 module.exports = router;

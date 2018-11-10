@@ -52,9 +52,8 @@ contract Banks {
     // - Tạo 1 interface gồm các function
 	// + Gửi Tiền
 	// + Rút Tiền
-
     function deposit(address _address, uint _money) public returns (string, uint){
-        Bank storage bank = banks[_address];
+        Bank memory bank = banks[_address];
         uint amount = bank.money + _money;
         bank.money = amount;
         emit Deposit (_address, _money, now);
@@ -73,14 +72,14 @@ contract Banks {
     //     var bank = banks[_address];
     //     bank.money -= _money;
     // }
-    function withDraw(address _address, uint _money)  public returns(string, uint) {
-        Bank storage bank = banks[_address];
+    function withDraw(address _address, uint _money)  public view returns(string, uint) {
+        Bank memory bank = banks[_address];
         uint amount = bank.money - _money;
         emit WithDraw (_address, _money, now);
 
         if (amount < defaultMoney) {
             return ("Số dư không đủ", bank.money);
-        }else if ((_money % defaultMoney) == 0) { // not working
+        }else if ((_money % defaultMoney) != 0) { // not working
             return ("Số tiền rút phải là bội của 50000", bank.money);
         }else {
             bank.money -= _money;
@@ -90,4 +89,4 @@ contract Banks {
         
         
     }
-}
+} 

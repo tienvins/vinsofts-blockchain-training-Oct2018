@@ -39,7 +39,7 @@ contract Bettings {
     function openWallet(address _sender, string _name, uint _money) 
             // onlyAccount(_sender) 
             checkAmount(_money) 
-            public constant 
+            public view 
             returns(uint id, string name, uint money)
     {
         Users newUser = users[_sender];
@@ -71,7 +71,7 @@ contract Bettings {
     // check 
 
     // lấy thông tin người chơi
-    function userInfor(address _address) public constant returns(uint id, string name, uint money){
+    function userInfor(address _address) public view returns(uint id, string name, uint money){
         return (
             users[_address].id,
             users[_address].name,
@@ -104,7 +104,7 @@ contract Bettings {
     function betting(address _player, uint _ether, uint numberABet)
              checkEther(_ether)
              checkNumberABet(numberABet)
-             public constant returns (
+             public view returns (
                  uint playerId, 
                  string playerName, 
                  uint playerEther, 
@@ -146,7 +146,7 @@ contract Bettings {
     }
 
     // mở thưởng
-    function rewardInform() checkPlayer public constant returns (address hero){
+    function rewardInform() checkPlayer public view returns (address hero){
         uint playerId = randomPlayer();
         return listPlayers[playerId];
     }
