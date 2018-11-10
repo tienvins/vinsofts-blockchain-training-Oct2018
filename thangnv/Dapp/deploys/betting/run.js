@@ -1,4 +1,4 @@
-const httpProvider = 'http://localhost:7545';
+const httpProvider = 'https://ropsten.infura.io/v3/2ea352f51b5a45819be9923cdfb58894';
 
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider(httpProvider));
@@ -18,7 +18,7 @@ const abi = JSON.stringify(JSON.parse(output.contracts[':Betting'].interface));
 console.log('bytecode: ', bytecode);
 console.log('abi: ', abi);
 
-const privateKey = '8a09d30fd443ab5610ed8a779f56e4dbeb8ec056230725f65e77b90d3c2f49d0';
+const privateKey = '13B66C7C98144C3BBD50C4169F4A4032D0648C7AA250C2937EBB5E600D2F677B';
 
 var wallet = web3.eth.accounts.privateKeyToAccount('0x' + privateKey);
 web3.eth.getTransactionCount(wallet.address).then(nonce => {
