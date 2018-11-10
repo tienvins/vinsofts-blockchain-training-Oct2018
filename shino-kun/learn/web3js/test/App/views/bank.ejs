@@ -19,6 +19,7 @@
         <input type="text" name="" id="customer-address" placeholder="address">
         <input type="text" name="" id="customer-name" placeholder="name">
         <button id="open-bank">Open</button>
+        <p class="msg" style="color: red"></p>
     </div>
 
     <div id="list">
@@ -34,15 +35,20 @@
         function showListCustomers(list){
             $('.list').empty();
             $.each(list, function(i, v){
-                $('.list').append("<li>"+v+"</li>")
+                $('.list').append("<li><a href='/mybank/"+v+"'>"+v+"</a></li>")
             })
         }
         $("#open-bank").click(function(){
             $.post("/open-bank", {address: $("#customer-address").val(), name: $("#customer-name").val()}, function(res){
                 console.log(res);
-                if(res.status ==200){
+                $('.msg').show();
+                if(res.status){
                     showListCustomers(res.listCustomers);
+                    $(".msg").text("* Mở tài khoản thành công");
+                }else{
+                    $(".msg").text("* Mở tài khoản thất bại");
                 }
+                setTimeout(function() {$('.msg').hide()}, 3000)
             })
         })
 

@@ -56,12 +56,11 @@
     <div class="col-md-6">
       <p>Lịch sử cá cược của lần trao thưởng
         <%=sovongdaquaythuong%>
-        
       </p>
       <form method="POST">
         <select name="sovongdaquaythuong" onchange="this.form.submit()">
           <% for(var i=1; i<=sovongdaquaythuong; i++) {%>
-          <option value="<%=i%>"  <%=(req.body.sovongdaquaythuong==i)?'selected':''%>>
+          <option value="<%=i%>" <%=(req.body.sovongdaquaythuong==i)?'selected':''%>>
             <%=i%>
           </option>
           <% } %>

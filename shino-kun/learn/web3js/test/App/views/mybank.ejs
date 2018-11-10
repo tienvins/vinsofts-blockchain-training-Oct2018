@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    
+    <div >
+      <h3>Thông tin tài khoản</h3>
+      <p> ID: <strong><%= bankInfo['2']%></strong></p>
+      <p> Name: <strong><%= bankInfo['0']%></strong></p>
+      <p> Số dư: <strong class="amount"><%= bankInfo['1']%></strong></p>
+    </div>
+    
+    <div class="deposit">
+      <h3>Giao dịch</h3>
+      <input type="text" placeholder="money" class="money">
+      <p class="msg" style="color: red"></p>
+      <button class="send-money">Nộp tài khoản</button>
+      <button class="withdraw-money">Rút tiền</button>
+    </div>
+    <a href="/bank">Back</a>
+    <a href="/">Home</a>
+    
+    <script>
+      var url = window.location.href;
+      var address = window.location.href.substring(url.lastIndexOf('/') + 1);
+      
+      console.log('address: ', address);
+      console.log('money', $('.money').val());
+      $(".send-money").click(function(){
+        var money = $('.money').val();
+
+        $.post("/deposit", {
+          address: address,
+          money: money
+        }, function(res){
+          console.log(res);
+          $('.msg').show();
+          if(res.status){
+              $(".msg").text("* Nộp tài khoản thành công");
+              $('.amount').text(res.money);
+          }else{
+              $(".msg").text("* Nộp tài khoản thất bại");
+          }
+          setTimeout(function() {$('.msg').hide()}, 2000)
+        })
+      })
+
+      $(".withdraw-money").click(function(){
+        var money = $('.money').val();
+        console.log(money);
+
+        $.post("/withdraw", {
+          address: address,
+          money: money
+        }, function(res){
+          console.log(res);
+          $('.msg').show();
+          if(res.status){
+              $(".msg").text("* Rút tiền thành công");
+              $('.amount').text(res.money);
+          }else{
+              $(".msg").text("* Rút tiền thất bại");
+          }
+          setTimeout(function() {$('.msg').hide()}, 2000)
+        })
+      })
+
+    </script>
+  </body>
+</html>

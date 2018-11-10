@@ -1,16 +1,18 @@
 const Web3 = require('web3');
-const Config = require('../config/blockchain');
-const link = Config.link;
+const Configblc = require('../config/blockchain');
+const link = Configblc.link;
 const web3 = new Web3(Web3.givenProvider || new Web3.providers.HttpProvider(link));
-
+const fs = require('fs');
+const Config = require('../config/app');
 const Tx = require('ethereumjs-tx');
 var Wallet = require('ethereumjs-wallet');
 var EthUtil = require('ethereumjs-util');
-// var fs         = require('fs');
-var myContract = new web3.eth.Contract(Config.abi, Config.contractAdress, {
-     from: Config.address,
-     data: Config.dataContract,
-     //    gas         : '4700000'
+
+Configblc.contractAdress = fs.readFileSync(Config.config()+"contractAdress.json").toString();
+const abiContract = new web3.eth.Contract(Configblc.abi);
+var myContract = new web3.eth.Contract(Configblc.abi, Configblc.contractAdress, {
+     from: Configblc.address,
+     data: Configblc.dataContract
 });
 
 // myContract.events.Transfer({  })
@@ -47,10 +49,29 @@ async function getRaw(privateKey) {
 
 module.exports = {
      contract: myContract,
+     abiContract:abiContract,
      web3: web3,
-     getBalances: async function getBalances(address) { // get tiền của 1 địa chỉ account
-          var balances = await myContract.methods.balanceOf(address).call();
-          return balances;
+     abi:Configblc.abi,
+     data:Configblc.data,
+     deploy: async function deploy(privateKey) { // get tiền của 1 địa chỉ account
+          var myContract1 = abiContract;
+          var selt = await myContract1.deploy({
+               data: Configblc.data,
+               arguments: []
+               }).encodeABI();
+          var rs = await getRaw(privateKey);
+          var rawTx = {
+               nonce: rs.transactionCount,
+               gasPrice: web3.utils.toHex(web3.utils.toWei('1', 'wei')),
+               gasLimit: web3.utils.toHex(web3.utils.toWei('2000000', 'wei')),
+               from: rs.publicKey,
+               data: selt
+          }
+          var tx = new Tx(rawTx);  // tạo hóa đơn
+          tx.sign(rs.privateKeyBuffer); // ký xác nhận bằng private key
+          var serializedTx = tx.serialize();
+          var sendSignedTransaction = await web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'));  // gửi Transaction
+          return sendSignedTransaction;
      },
      choseNumber: async function choseNumber(number, privateKey) { // gui tien cho 1 tai khoan
           var rs = await getRaw(privateKey);
@@ -60,7 +81,7 @@ module.exports = {
                gasPrice: web3.utils.toHex(web3.utils.toWei('1', 'wei')),
                gasLimit: web3.utils.toHex(web3.utils.toWei('900000', 'wei')),
                value: web3.utils.toHex(web3.utils.toWei('1', 'ether')),
-               to: Config.contractAdress,
+               to: Configblc.contractAdress,
                from: rs.publicKey,
                data: methodData
           }

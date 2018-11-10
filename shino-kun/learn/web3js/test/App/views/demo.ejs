@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <%= typeof accounts%>
+    <h3>Danh sach accounts</h3>
+    <ul>
+      <% for (let i in accounts) { %>
+        <li><%= accounts[i] %></li>
+      <% } %>
+    </ul>
+    <a href="/">Home</a>
+    <script>
+      $.get("/demo", function(res){
+        console.log(res);
+      
+      })
+    </script>
+  </body>
+</html>

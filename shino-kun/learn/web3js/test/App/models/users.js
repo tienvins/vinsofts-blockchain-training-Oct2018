@@ -4,14 +4,10 @@ UserSchema = mongoose.Schema({
 	fullname: {
 		type: String,
     },
-   	username: {
+   	address: {
 		type: String,
-		minlenght: [5, 'Username must be 5 characters or more.']
 	},
-	password: {
-		type: String,
-		minlenght: [8, 'Username must be 5 characters or more.']
-	},
+	
 	created_at: {
 		type: Date,
 		default: ""

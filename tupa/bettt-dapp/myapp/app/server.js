@@ -1,4 +1,4 @@
-const Betting = require('./bet.js');
+const Betting = require('./config.js');
 const web3 = Betting.web3;  
 const contract = Betting.contract;
 const Tx = Betting.Tx;
@@ -52,7 +52,7 @@ module.exports = {
     },
 
     getTotalAmount: async function getTotalAmount(){
-        var data = await contract.methods.totalAmout().call();
+        var data = await contract.methods.totalAmount().call();
         return data;
     }
 }

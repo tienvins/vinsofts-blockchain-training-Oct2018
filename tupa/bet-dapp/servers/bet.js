@@ -212,7 +212,7 @@ const abi =
 	}
 ]
 
-const contractAddress = '0xeb7b5e177b2a525e7e3afcc8ecc0a3ff817bec23'
+const contractAddress = '0x2b49a4dbf9a690402dc0b9f95812c9fbfd8538f9'
 const contract = new web3.eth.Contract(abi, contractAddress)
 
 module.exports = {
