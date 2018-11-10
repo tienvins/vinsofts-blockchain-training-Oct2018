@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 contract Betting{
     
     address public owner;
-    uint public  numberOwner=3;
+    uint public  numberOwner=2;
     
     constructor(){
         owner = msg.sender;
